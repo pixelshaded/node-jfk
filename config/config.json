@@ -2,6 +2,7 @@
     "folders": {
         "route":      "/app/routes",
         "controller":  "/app/controllers",
-        "environment":  "/config/environments"
+        "environment":  "/config/environments",
+        "twig": "/twigjs"
     }
 }
