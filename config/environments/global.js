@@ -1,32 +1,29 @@
 app.configure(function(){
     console.log('Configuring global environment.');
 
-    var cwd = process.cwd();
-    var twig = require(cwd + app.config.folders.twig);
-    var mysqlConfig = require('../database.json');
-    var OAuthConfig = require('../oauth.json');
-    var mysqlSessionStore = require(cwd + '/app/services/mysql-session-store')(express);
-//    var OAuthStrategy = require('passport-oauth').Strategy;
+    var twig = require(app.config.cwd + app.config.folders.twig);
+    var mysqlSessionStore = require(app.config.cwd + '/app/services/mysql-session-store')(express);
+    var OAuthStrategy = require('passport-oauth').OAuthStrategy;
 
     //load global modules
     app.mysql = require('mysql');   
     app.passport = require('passport');
 
-    app.mysql = app.mysql.createConnection(mysqlConfig[app.settings.env]);
+    app.mysql = app.mysql.createConnection(app.config.mysql[app.settings.env]);
 
-//    app.passport.use(new OAuthStrategy(OAuthConfig[app.settings.env], function(accessToken, refreshToken, profile, done){
-//	User.findOrCreate(function (err, user) {
-//	    done(err, user);
-//	});
-//    }));
+    app.passport.use(new OAuthStrategy(app.config.oauth[app.settings.env], function(accessToken, refreshToken, profile, done){
+	User.findOrCreate(function (err, user) {
+	    done(err, user);
+	});
+    }));
 
     app.register('twig', twig);
 
-    app.set('views', cwd + app.config.folders.views);
+    app.set('views', app.config.cwd + app.config.folders.view);
     app.set('view engine', 'twig');
     app.set("view options", { layout: false });
 
-    app.use(express.static(cwd + app.config.folders.web));
+    app.use(express.static(app.config.cwd + app.config.folders.web));
     app.use(express.favicon());
     app.use(express.bodyParser());
     app.use(express.cookieParser('bro asrif91991kdkaj its a secret'));

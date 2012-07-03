@@ -3,5 +3,6 @@
     "environment":  "/config/environments",
     "twig": "/twigjs",
     "web": "/web",
-    "views": "/views"
+    "view": "/views",
+    "service": "/app/services"
 }

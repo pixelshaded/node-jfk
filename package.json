@@ -7,6 +7,7 @@
     , "tracer": "0.5.1"
     , "mysql": "2.0.0-alpha3"
     , "passport": "0.1.11"
+    , "passport-oauth" : "0.1.9"
   }
   , "dependencies_unused" : {
       "yelp": "0.1.1"
