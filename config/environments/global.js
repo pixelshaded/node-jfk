@@ -3,7 +3,15 @@ app.configure(function(){
 
     var twig = require(app.config.cwd + app.config.folders.twig);
     var mysqlSessionStore = require(app.config.cwd + '/app/services/mysql-session-store')(express);
-    var OAuthStrategy = require('passport-oauth').OAuthStrategy;
+    var OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
+    
+    var OAuthConfig = {
+	authorizationURL : app.router.generateURL('oauth.authorization'),
+	tokenURL : app.router.generateURL('oauth.token'),
+	clientID : '123-456-789',
+	clientSecret : 'shhh-its-a-secret',
+	callbackURL : app.router.generateURL('oauth.callback')
+    };
 
     //load global modules
     app.mysql = require('mysql');   
@@ -11,7 +19,7 @@ app.configure(function(){
 
     app.mysql = app.mysql.createConnection(app.config.mysql[app.settings.env]);
 
-    app.passport.use(new OAuthStrategy(app.config.oauth[app.settings.env], function(accessToken, refreshToken, profile, done){
+    app.passport.use(new OAuth2Strategy(OAuthConfig, function(accessToken, refreshToken, profile, done){
 	User.findOrCreate(function (err, user) {
 	    done(err, user);
 	});

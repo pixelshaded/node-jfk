@@ -1,25 +1,31 @@
-var router = {};
+module.exports = function(approuter){
 
-router.routes = {}; 
+    router = approuter; //we want to extend the normal router
+    router.routes = {}; 
 
-router.generateURL = function(name, relative){
-    if (relative === undefined) relative = true;
-    var route = findRouteBy('name', name);
-    if (!route){
-	logger.error('Could not find a route with the name %s', name);
-	return null;
+    router.generateURL = function(name, relative){
+	if (relative === undefined) relative = true;
+	var route = findRouteBy('name', name);
+	if (!route){
+	    logger.error('Could not find a route with the name %s', name);
+	    return null;
+	}
+
+	if (relative) return route.uri;
+	else return app.config.server.domain + route.uri;
     }
 
-    if (relative) return route.uri;
-    else return app.config.server.domain + route.uri;
+    foreachFileInFolders(app.config.cwd + '/' + app.config.folders.controller, processControllers);
+
+    for (var i in router.routes){
+	var route = router.routes[i];
+	logger.debug('%s %s %s', route.method, route.name, route.uri);
+    }
+    
+    return router;
 }
 
-foreachFileInFolders(app.config.cwd + '/' + app.config.folders.controller, processControllers);
-
-for (var i in router.routes){
-    var route = router.routes[i];
-    logger.debug('%s %s %s', route.method, route.name, route.uri);
-}
+var router = {};
 
 function findRouteBy(key, value){
 
@@ -113,5 +119,3 @@ function validMethod(route){
 
     return valid;
 }
-
-module.exports = router;

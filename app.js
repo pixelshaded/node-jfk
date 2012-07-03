@@ -18,7 +18,8 @@ app.config.mysql = require('./config/database');
 app.config.cwd = process.cwd();
 
 app.util = require('.' + app.config.folders.service + '/utilities');
-app.router = require('.' + app.config.folders.service + '/router');
+app.router = require('.' + app.config.folders.service + '/router')(app.router);
+
 require('.' + app.config.folders.environment + '/global');
 require('.' + app.config.folders.environment + '/' + app.settings.env);
 
