@@ -13,7 +13,6 @@ app = module.exports = express.createServer();
 app.config = {};
 app.config.folders = require('./config/folders');
 app.config.server = require('./config/server');
-app.config.oauth = require('./config/oauth');
 app.config.mysql = require('./config/database');
 app.config.cwd = process.cwd();
 
