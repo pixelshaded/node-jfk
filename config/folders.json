@@ -1,0 +1,7 @@
+{
+    "controller":  "/app/controllers",
+    "environment":  "/config/environments",
+    "twig": "/twigjs",
+    "web": "/web",
+    "views": "/views"
+}

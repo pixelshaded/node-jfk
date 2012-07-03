@@ -4,14 +4,24 @@
  */
 
 express = require('express');
+fs = require('fs');
+logger = require('tracer').colorConsole({
+       format : "<{{title}}> {{file}}:{{line}} {{message}}"
+});
 app = module.exports = express.createServer();
 
-app.config = require('./config/config');
+app.config = {};
+
+app.config.folders = require('./config/folders');
+app.config.server = require('./config/server');
+app.config.oauth = require('./config/oauth');
+
 var cwd = process.cwd();
 
+app.util = require(cwd + '/app/services/utilities');
+app.router = require(cwd + '/app/services/router')();
 require(cwd + app.config.folders.environment + '/global');
 require(cwd + app.config.folders.environment + '/' + app.settings.env);
-require(cwd + '/app/services/route-mapper')(cwd, app.config.folders.route, app.config.folders.controller);
 
 app.listen(3000, function(){
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

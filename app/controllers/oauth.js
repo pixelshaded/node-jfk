@@ -1,9 +1,9 @@
 var routes = [
-    { uri : '/', method : 'get', name : 'main.index',	action : index },
-    { uri : '/test', method : 'get', name : 'main.test', action : test },
+    { uri : '/', method : 'get', name : 'oauth.index',	action : index },
+    { uri : '/test', method : 'get', name : 'oauth.test', action : test },
 ];
 
-exports.prefix = '/main';
+exports.prefix = '/oauth';
 exports.routes = routes;
 
 function index(req, res, next){

@@ -1,2 +1,4 @@
 node_modules
 config/database.json
+config/oauth.json
+config/server.json
