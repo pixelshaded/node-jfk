@@ -3,6 +3,8 @@
         "route":      "/app/routes",
         "controller":  "/app/controllers",
         "environment":  "/config/environments",
-        "twig": "/twigjs"
+        "twig": "/twigjs",
+        "web": "/web",
+        "views": "/views"
     }
 }
