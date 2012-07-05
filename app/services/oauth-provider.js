@@ -5,7 +5,7 @@ var myClients = {
  '1': '1secret'
 };
 
-provider.on('enfore_login', function(req, res, authorize_url, next){
+provider.on('enforce_login', function(req, res, authorize_url, next){
     if (req.session.user){
 	next(req.session.user);
     }
