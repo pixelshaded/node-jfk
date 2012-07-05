@@ -16,16 +16,37 @@ module.exports = function(approuter){
     }
 
     foreachFileInFolders(app.config.cwd + '/' + app.config.folders.controller, processControllers);
-
+    
+    var debugString = 'Route Map\n\n';
+    
     for (var i in router.routes){
-	var route = router.routes[i];
-	logger.debug('%s %s %s', route.method, route.name, route.uri);
+	var route = router.routes[i];	
+	debugString += addSpaces(route.method.toUpperCase(), maxLength.method.length) + ' ' + addSpaces(route.uri, maxLength.uri.length) + ' ' + route.name + '\n';
     }
+    
+    logger.debug(debugString);
     
     return router;
 }
 
 var router = {};
+
+//this is for debug
+var maxLength = { 
+    method : { length : 0},
+    uri : { length : 0}
+};
+
+function addSpaces(string, maxLength){
+    
+    var diff = maxLength + 4 - string.length;
+    
+    for (var i = 0; i < diff; i++){
+	string += ' ';
+    }
+    
+    return string;
+}
 
 function findRouteBy(key, value){
 
@@ -34,7 +55,7 @@ function findRouteBy(key, value){
 	var route = router.routes[i];
 
 	if (route[key] === undefined){
-	    logger.error('Route objects do not contain the key %s', key);
+	    logger.error('No route objects contain the key %s', key);
 	    return null;
 	}
 
@@ -93,11 +114,16 @@ function processControllers(path, file){
 
 	var match = findRouteBy('uri', route.uri);
 
-	if (match){
-	    logger.warn('Route %s will overwrite route %s because they share the same uri: %s', routes.name, match.name, route.uri);
+	if (match && match.method === route.method){
+	    logger.warn('Route %s will overwrite route %s because they share the same uri: %s %s', route.name, match.name, route.method.toUpperCase(), route.uri);
 	}
 	
 	router.routes[route.name] = route;
+	
+	//for spacing of debug. Stores length of longest field.
+	for(field in maxLength){
+	    if (route[field].length > maxLength[field].length) maxLength[field].length = route[field].length;
+	}
     }
 }
 
