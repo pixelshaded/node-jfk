@@ -7,11 +7,11 @@ app.configure(function(){
     var provider = require(app.config.cwd + app.config.folders.service + '/oauth-provider');
     
     var OAuthConfig = {
-	authorizationURL : app.router.generateURL('oauth.client.authorization'),
-	tokenURL : app.router.generateURL('oauth.client.token'),
+	authorizationURL : app.router.generateURL('oauth.consumer.authorization'),
+	tokenURL : app.router.generateURL('oauth.consumer.token'),
 	clientID : '123-456-789',
 	clientSecret : 'shhh-its-a-secret',
-	callbackURL : app.router.generateURL('oauth.client.callback')
+	callbackURL : app.router.generateURL('oauth.consumer.callback')
     };
 
     //load global modules

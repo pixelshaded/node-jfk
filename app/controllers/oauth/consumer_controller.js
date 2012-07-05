@@ -1,12 +1,12 @@
 var routes = [
-    { uri : '/authorization', method : 'get', name : 'oauth.client.authorization', action : authorization },
-    { uri : '/token', method : 'get', name : 'oauth.client.token', action : token },
-    { uri : '/callback', method : 'get', name : 'oauth.client.callback', action : callback },
-    { uri : '/provider', method : 'get', name : 'oauth.client.provider', action : provider },
-    { uri : '/login', method : 'get', name : 'oauth.client.login', action : login }
+    { uri : '/authorization', method : 'get', name : 'oauth.consumer.authorization', action : authorization },
+    { uri : '/token', method : 'get', name : 'oauth.consumer.token', action : token },
+    { uri : '/callback', method : 'get', name : 'oauth.consumer.callback', action : callback },
+    { uri : '/provider', method : 'get', name : 'oauth.consumer.provider', action : provider },
+    { uri : '/login', method : 'get', name : 'oauth.consumer.login', action : login }
 ];
 
-exports.prefix = '/oauth/client';
+exports.prefix = '/oauth/consumer';
 exports.routes = routes;
 
 function authorization(req, res, next){
@@ -24,7 +24,7 @@ function login(req, res, next){
 function callback(req, res, next){
     app.passport.authenticate('provider', {
 	successRedirect: app.router.generateURL('main.index'),
-	failureRedirect: app.router.generateURL('oauth.login')
+	failureRedirect: app.router.generateURL('oauth.client.login')
     })(req, res, next);
 }
 
