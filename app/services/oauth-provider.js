@@ -5,7 +5,11 @@ var myClients = {
  '1': '1secret'
 };
 
+console.log('herp derp');
+
 provider.on('enforce_login', function(req, res, authorize_url, next){
+    logger.debug('enforce_login');
+    
     if (req.session.user){
 	next(req.session.user);
     }
@@ -16,10 +20,14 @@ provider.on('enforce_login', function(req, res, authorize_url, next){
 });
 
 provider.on('authorize_form', function(req, res, client_id, authorize_url){
+    logger.debug('authorize_form');
+    
     res.end('<html>this app wants to access your account... <form method="post" action="' + authorize_url + '"><button name="allow">Allow</button><button name="deny">Deny</button></form>');
 });
 
 provider.on('save_grant', function(req, client_id, code, next){
+    logger.debug('save_grant');
+    
     if(!(req.session.user in myGrants))
     myGrants[req.session.user] = {};
 
@@ -28,11 +36,15 @@ provider.on('save_grant', function(req, client_id, code, next){
 });
 
 provider.on('remove_grant', function(user_id, client_id, code){
+    logger.debug('remove_grant');
+    
     if(myGrants[user_id] && myGrants[user_id][client_id])
     delete myGrants[user_id][client_id];
 });
 
 provider.on('lookup_grant', function(client_id, client_secret, code, next){
+    logger.debug('lookup_grant');
+    
     // verify that client id/secret pair are valid
     if(client_id in myClients && myClients[client_id] == client_secret) {
 	for(var user in myGrants) {
@@ -47,11 +59,15 @@ provider.on('lookup_grant', function(client_id, client_secret, code, next){
 });
 
 provider.on('create_access_token', function(user_id, client_id, next){
+    logger.debug('create_access_token');
+    
     var data = 'blah'; // can be any data type or null
     next(data);
 });
 
 provider.on('access_token', function(req, token, next){
+    logger.debug('access_token');
+    
     var TOKEN_TTL = 10 * 60 * 1000; // 10 minutes
 
     if(token.grant_date.getTime() + TOKEN_TTL > Date.now()) {

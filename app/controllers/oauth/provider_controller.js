@@ -23,7 +23,7 @@ function getLogin(req, res, next){
 
     var next_url = req.query.next ? req.query.next : app.router.generateURL('oauth.provider.index');
 
-    res.end('<html><form method="post" action="/login"><input type="hidden" name="next" value="' + next_url + '"><input type="text" placeholder="username" name="username"><input type="password" placeholder="password" name="password"><button type="submit">Login</button></form>');
+    res.end('<html><form method="post" action="' + app.router.generateURL('oauth.provider.login') + '"><input type="hidden" name="next" value="' + next_url + '"><input type="text" placeholder="username" name="username"><input type="password" placeholder="password" name="password"><button type="submit">Login</button></form>');
 }
 
 function login(req, res, next){
@@ -36,7 +36,7 @@ function login(req, res, next){
 function logout(req, res, next){
     req.session.destroy(function(error){
 	if (error) logger.error(error);
-	res.writeHead(303, {Location: app.router.generateURL('main.index')});
+	res.writeHead(303, {Location: app.router.generateURL('oauth.provider.index')});
 	res.end();
     });
 }
