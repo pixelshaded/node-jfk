@@ -11,11 +11,10 @@ function login(req, res, next){
     var result = app.util.getUndefined([req.body.password, req.body.username],['password', 'username']);
     if (result) {
 	res.json({ "errors" : result}, 400);
-	return next();
+	return;
     }
     
     res.json('login');
-    return next();
 }
 
 function logout(req, res, next){
