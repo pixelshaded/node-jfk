@@ -5,7 +5,7 @@ module.exports = function(approuter){
 
     router.generateURL = function(name, relative){
 	if (relative === undefined) relative = true;
-	var route = findRouteBy('name', name);
+	var route = findRouteByName(name);
 	if (!route){
 	    logger.error('Could not find a route with the name %s', name);
 	    return null;
@@ -15,7 +15,7 @@ module.exports = function(approuter){
 	else return app.config.server.domain + route.uri;
     }
 
-    foreachFileInFolders(app.config.cwd + '/' + app.config.folders.controller, processControllers);
+    foreachFileInFolders(app.config.cwd + app.config.folders.controller, processControllers);
     
     var debugString = 'Route Map\n\n';
     
@@ -48,22 +48,30 @@ function addSpaces(string, maxLength){
     return string;
 }
 
-function findRouteBy(key, value){
+function findRouteName(name){
 
     for (var i in router.routes){
 
 	var route = router.routes[i];
-
-	if (route[key] === undefined){
-	    logger.error('No route objects contain the key %s', key);
-	    return null;
-	}
-
-	if (route[key] === value) {
+	
+	if (route.name === name) {
 	    return route;
 	}
     }
 
+    return null;
+}
+
+function findRouteByUri(uri, method){
+    
+    for (var i in router.routes){
+	var route = router.routes[i];
+	
+	if (route.uri === uri && route.method === method){
+	    return route;
+	}
+    }
+    
     return null;
 }
 
@@ -97,7 +105,7 @@ function processControllers(path, file){
 	var route = routes[i];
 	if (prefix !== undefined) route.uri = prefix + route.uri;
 
-	if (!app.util.defined([route.uri, route.name, route.action], ['uri', 'name', 'action'])){
+	if (app.util.getUndefined([route.uri, route.name, route.action], ['uri', 'name', 'action'])){
 	    logger.error('Route %s in %s is missing a field.', i, fullpath);
 	    continue;
 	}
@@ -112,9 +120,9 @@ function processControllers(path, file){
 	    continue;
 	}	
 
-	var match = findRouteBy('uri', route.uri);
+	var match = findRouteByUri(route.uri, route.method);
 
-	if (match && match.method === route.method){
+	if (match){
 	    logger.warn('Route %s will overwrite route %s because they share the same uri: %s %s', route.name, match.name, route.method.toUpperCase(), route.uri);
 	}
 	
