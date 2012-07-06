@@ -19,4 +19,47 @@ exports.defined = function(objects, names){
     return defined;
 }
 
+exports.queryFailed = function(error, data, query, logNoResult){
+        
+    //Sometimes we dont care if we have no results or affected rows.
+    if (logNoResult === undefined) logNoResult = true;
+
+    if (error){
+	app.logger.error('---------QUERY HAD AN ERROR---------');
+	app.logger.error(error);
+	app.logger.error(query);
+	return true;
+    }
+
+    if (data.length !== undefined){
+
+	if (data.length === 0) {
+	    if (logNoResult) {
+		app.logger.error('---------QUERY DID NOT RETURN A RESULT---------');
+		app.logger.error(query);
+	    }
+	    return true;
+	}
+    }
+    else if (data.affectedRows !== undefined){
+
+	if (data.affectedRows === 0){
+	    if (logNoResult) {
+		app.logger.error('---------QUERY DID NOT AFFECT ANY ROWS---------');
+		app.logger.error(query);
+	    }
+	    return true;
+	}
+    }
+    else if (data.affectedRows === undefined && data.length === undefined) {
+	app.logger.error('---------INCORRECT DATA ARGUMENT---------');
+	app.logger.error('Data did not have a length or affected rows.');
+	app.logger.error('Query: %s', query);
+	app.logger.error('Data: %s', data);
+	return true;
+    }
+
+    return false;
+}
+
 
