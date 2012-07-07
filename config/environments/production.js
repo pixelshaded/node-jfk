@@ -1,7 +1,7 @@
 app.configure('production', function(){
    console.log('Configuring production environment.');
    
-    var mysqlSessionStore = require(app.config.cwd + app.config.folders.service + '/mysql-session-store')(express);
+    var mysqlSessionStore = require(app.config.cwd + app.config.folders.app_module + '/mysql-session-store')(express);
     
     app.use(require('connect').json());
     app.use(app.util.middleware.onJsonError);    

@@ -1,4 +1,4 @@
 {
     "controller":  "/app/controllers",
-    "service": "/app/services"
+    "app_module": "/app_modules"
 }

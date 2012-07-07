@@ -1,7 +1,7 @@
 app.configure('development', function(){
    console.log('Configuring development environment.');
    
-    var mysqlSessionStore = require(app.config.cwd + app.config.folders.service + '/mysql-session-store')(express);
+    var mysqlSessionStore = require(app.config.cwd + app.config.folders.app_module + '/mysql-session-store')(express);
     
     app.use(app.util.middleware.requestLogger);
     app.use(app.util.middleware.logJsonResponse);

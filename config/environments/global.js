@@ -7,8 +7,8 @@ app.configure(function(){
     app.config.server = require('../server');
     app.config.mysql = require('../database');
 
-    app.util = require(app.config.cwd + app.config.folders.service + '/utilities');
-    app.router = require(app.config.cwd + app.config.folders.service + '/router')(app.router);
+    app.util = require(app.config.cwd + app.config.folders.app_module + '/utilities');
+    app.router = require(app.config.cwd + app.config.folders.app_module + '/router')(app.router);
     
     app.passport = require('passport');
     app.mysql = require('mysql').createConnection(app.config.mysql[app.settings.env]);
