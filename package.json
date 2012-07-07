@@ -7,6 +7,6 @@
     , "tracer": "0.5.1"
     , "mysql": "2.0.0-alpha3"
     , "connect": "2.3.6"
-    , "passport": "0.1.11"
+    , "validator" : "0.4.9"
   }
 }

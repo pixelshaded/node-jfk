@@ -8,11 +8,13 @@ exports.routes = routes;
 
 function login(req, res, next){
     
-    var result = app.util.getUndefined([req.body.password, req.body.username],['password', 'username']);
+    var result = app.util.getUndefined([req.body.password, req.body.email],['password', 'email']);
     if (result) {
 	res.json({ "errors" : result}, 400);
 	return;
     }
+    
+    
     
     res.json('login');
 }
