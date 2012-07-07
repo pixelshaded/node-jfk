@@ -42,8 +42,6 @@ function login(req, res, next){
 	    return;
 	}
     })
-    
-    res.json('login');
 }
 
 function logout(req, res, next){

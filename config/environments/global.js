@@ -13,5 +13,5 @@ app.configure(function(){
     app.mysql = require('mysql').createConnection(app.config.mysql[app.settings.env]);
     app.check = require('validator').check;
     app.sanitize = require('validator').sanitize;
-    app.auth = require(app.config.cwd + app.config.folders.app_module + '/authentiation');
+    app.auth = require(app.config.cwd + app.config.folders.app_module + '/authentication');
 });
