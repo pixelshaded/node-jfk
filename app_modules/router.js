@@ -15,7 +15,7 @@ module.exports = function(approuter){
 	else return app.config.server.domain + route.uri;
     }
 
-    foreachFileInFolders(app.config.cwd + app.config.folders.controller, processControllers);
+    app.util.foreachFileInTreeSync(app.config.cwd + app.config.folders.controller, processControllers);
     
     var debugString = 'Route Map\n\n';
     
@@ -75,21 +75,9 @@ function findRouteByUri(uri, method){
     return null;
 }
 
-function foreachFileInFolders(path, func){
+function processControllers(folderPath, file){
 
-    fs.readdirSync(path).forEach(function(file){
-	if (file.lastIndexOf('.') === -1) {
-	    foreachFileInFolders(path + '/' + file, func);
-	}
-	else {
-	    func(path, file);
-	}
-    });
-}
-
-function processControllers(path, file){
-
-    var fullpath = path + '/' + file;
+    var fullpath = folderPath + '/' + file;
     var controller = require(fullpath);
 
     if (controller.routes === undefined || controller.routes.length === 0){

@@ -1,7 +1,7 @@
 var connect = require('connect');
 
 var server = connect.createServer()
-.use(connect.vhost('dev.meetsync.com', require('./meetsync')))
+.use(connect.vhost('dev.meetsync.com', require('./app')))
 .use(function(req, res, next){
    //anything not caught by the sub domain
    res.writeHead(200, {});

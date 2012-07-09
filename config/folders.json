@@ -1,4 +1,5 @@
 {
     "controller":  "/app/controllers",
-    "app_module": "/app_modules"
+    "app_module": "/app_modules",
+    "entity": "/app/entities"
 }

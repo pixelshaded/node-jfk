@@ -63,4 +63,16 @@ exports.queryFailed = function(error, data, query, logNoResult){
     return false;
 }
 
+exports.foreachFileInTreeSync = function(folderPath, func){
+
+    fs.readdirSync(folderPath).forEach(function(file){
+	if (file.lastIndexOf('.') === -1) {
+	    foreachFileInTreeSync(folderPath + '/' + file, func);
+	}
+	else {
+	    func(folderPath, file);
+	}
+    });
+}
+
 
