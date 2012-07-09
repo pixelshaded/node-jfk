@@ -26,9 +26,9 @@ exports.queryFailed = function(error, data, query, logNoResult){
     if (logNoResult === undefined) logNoResult = true;
 
     if (error){
-	app.logger.error('---------QUERY HAD AN ERROR---------');
-	app.logger.error(error);
-	app.logger.error(query);
+	logger.error('---------QUERY HAD AN ERROR---------');
+	logger.error(error);
+	logger.error(query);
 	return true;
     }
 
@@ -36,8 +36,8 @@ exports.queryFailed = function(error, data, query, logNoResult){
 
 	if (data.length === 0) {
 	    if (logNoResult) {
-		app.logger.error('---------QUERY DID NOT RETURN A RESULT---------');
-		app.logger.error(query);
+		logger.error('---------QUERY DID NOT RETURN A RESULT---------');
+		logger.error(query);
 	    }
 	    return true;
 	}
@@ -46,17 +46,17 @@ exports.queryFailed = function(error, data, query, logNoResult){
 
 	if (data.affectedRows === 0){
 	    if (logNoResult) {
-		app.logger.error('---------QUERY DID NOT AFFECT ANY ROWS---------');
-		app.logger.error(query);
+		logger.error('---------QUERY DID NOT AFFECT ANY ROWS---------');
+		logger.error(query);
 	    }
 	    return true;
 	}
     }
     else if (data.affectedRows === undefined && data.length === undefined) {
-	app.logger.error('---------INCORRECT DATA ARGUMENT---------');
-	app.logger.error('Data did not have a length or affected rows.');
-	app.logger.error('Query: %s', query);
-	app.logger.error('Data: %s', data);
+	logger.error('---------INCORRECT DATA ARGUMENT---------');
+	logger.error('Data did not have a length or affected rows.');
+	logger.error('Query: %s', query);
+	logger.error('Data: %s', data);
 	return true;
     }
 
