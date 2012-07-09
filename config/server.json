@@ -1,9 +1,0 @@
-{ "development":
-  {
-    "domain" : "10.0.1.137"
-  }
-, "production":
-  {
-    "domain" : "meetsync.com"
-  }
-}
