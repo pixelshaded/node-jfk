@@ -1,6 +1,6 @@
 {
     "version": {
-        "development": 0,
+        "development": -1,
         "production": -1
     },
     "migrations": [

@@ -8,8 +8,7 @@
     , "mysql": "2.0.0-alpha3"
     , "connect": "2.3.6"
     , "validator" : "0.4.9"
-  }
-  , "comments" : {
-      "persistencejs" : "git://github.com/zefhemel/persistencejs.git#08bc0da1b8e50fcc95b2485114a63ecfa6451223"
+    , "commander" : "1.0.0"
+    , "keypress" : "0.0.2"
   }
 }
