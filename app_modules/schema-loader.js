@@ -1,8 +1,8 @@
-exports.load = function(folderPath, db, sync){
+exports.load = function(folderPath, orm, types, sync){
 
     app.util.foreachFileInTreeSync(folderPath, function(folderPath, file){
 	var fullPath = folderPath + '/' + file;    
-	require(fullPath)(db, sync);
+	require(fullPath)(orm, types, sync);
     });
 }
 

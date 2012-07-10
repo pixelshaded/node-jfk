@@ -1,0 +1,13 @@
+{
+    "version": {
+        "development": 0,
+        "production": -1
+    },
+    "migrations": [
+        {
+            "file": "1341884871044.js",
+            "description": "Initial database creation.",
+            "date": "derp"
+        }
+    ]
+}
