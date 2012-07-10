@@ -42,7 +42,7 @@ function create(description, options){
    var content = 'exports.description = "' + description + '";\n\n';
    if (fs.existsSync(template)) content += fs.readFileSync(template);
    else {
-       logger.warn('Could not find a template file. Generating one.');
+       logger.warn('Could not find a template file. Using default.');
        content += generateTemplate();
    }
    
@@ -145,14 +145,14 @@ function list(){
     var json = getTracking();
     if (!json) process.exit(1);
     
-    if (json.version[env] === -1) logger.debug('Unversioned.');
-    else logger.trace('Unversioned.');
+    if (json.version[env] === -1) logger.debug('** Unversioned **');
+    else logger.trace('Unversioned');
     
     for (var i = 0; i < json.migrations.length; i++){
 	
 	var msg = json.migrations[i].date + ' (' + json.migrations[i].file + '): ' + json.migrations[i].description;
 	
-	if (json.version[env] === i) logger.debug(msg);
+	if (json.version[env] === i) logger.debug('** ' + msg + ' **');
 	else logger.trace(msg);
     }
     
@@ -308,7 +308,7 @@ function processQueue(queue, index, json, finishcb){
     
     function proceed(error){
 	if (error) {
-	    logger.error('There was an error. Stopping at version %s', json.version[env]);
+	    logger.error('There was an error processing %s. Stopping at version %s', queue[index].migration.file, json.version[env]);
 	    fs.writeFileSync(tracking, JSON.stringify(json, null, 4));
 	    process.exit(1);
 	}
