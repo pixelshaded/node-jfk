@@ -14,9 +14,9 @@ app = module.exports = express.createServer();
 
 app.config = {};
 app.config.cwd = process.cwd();
-app.config.folders = require('../folders');
-app.config.server = require('../server');
-app.config.mysql = require('../database');
+app.config.folders = require('./config/folders');
+app.config.server = require('./config/server');
+app.config.mysql = require('./config/database');
 
 app.settings.env = app.config.server.environment;
 
