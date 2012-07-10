@@ -431,7 +431,10 @@ function generateTemplate(){
 "            " + "logger.error(query);" + "\n" +
 "            " + "next(error);" + "\n" +
 "        " + "}" + "\n" +
-"        " + "else next(null);" + "\n" +
+"        " + "else {" + "\n" +
+"            " + "logger.debug(query);" + "\n" +
+"            " + "next(null);" + "\n" +
+"        " + "}" + "\n" +
 "    " + "});" + "\n" +
 "}";
 
