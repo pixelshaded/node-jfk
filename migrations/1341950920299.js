@@ -1,7 +1,9 @@
+exports.description = "Create users table.";
+
 exports.up = function(mysql, next){
     
-    var upQuery = 'CREATE TABLE users(' +
-	'id int NOT NULL PRIMARY KEY AUTO_INCREMENT,' +
+    var upQuery = 'CREATE TABLE users (' +
+	'id int NOT NULL PRIMARY KEY,' +
 	'email varchar(254) NOT NULL,' +
 	'password varchar(64) NOT NULL,' +
 	'created datetime NOT NULL,' +
@@ -12,16 +14,15 @@ exports.up = function(mysql, next){
 
 exports.down = function(mysql, next){
     
-    var downQuery = 'DROP TABLE users';
-    
+    var downQuery = 'DROP TABLE users';    
     run(mysql, downQuery, next);
 }
 
 function run(mysql, query, next){
     mysql.query(query, function(error, info){
 	if (error){
-	    console.log(error);
-	    console.log(query);
+	    logger.error(error);
+	    logger.error(query);
 	    next(error);
 	}
 	else next(null);

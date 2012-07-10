@@ -1,5 +1,5 @@
 var program = require('commander');
-var logger = require('tracer').colorConsole({
+logger = require('tracer').colorConsole({
     format : "{{message}}"
 });
 var fs = require('fs');
@@ -37,11 +37,14 @@ function create(description, options){
    var filename = now + '.js';
    var file = directory + '/' + filename;
    
-   console.log('Creating migration file %s.', filename);
+   logger.trace('Creating migration file %s.', filename);
    
-   var content = '';
-   if (fs.exists(template)) content = fs.readFileSync(template);
-   else logger.warn('Could not find a template file. Generated files will be blank. Exports up and down function should be added manually taking arguments (db, next).');
+   var content = 'exports.description = "' + description + '";\n\n';
+   if (fs.existsSync(template)) content += fs.readFileSync(template);
+   else {
+       logger.warn('Could not find a template file. Generating one.');
+       content += generateTemplate();
+   }
    
    fs.writeFileSync(file, content);
    
@@ -50,6 +53,53 @@ function create(description, options){
    logger.trace('Updating tracker.');
    
    fs.writeFileSync(tracking, JSON.stringify(json, null, 4));
+}
+
+program
+.command('resync')
+.description('Auto populates migration tracking based on files in migration folder. This will overwrite old tracking.')
+.action(resync)
+
+function resync(){
+    
+    logger.trace('Resyncing the tracking will overwrite previous settings. Continue? (y,n)');
+    
+    prompt(['y','n'], function(key){
+	if (key.name == 'n') process.exit(1);
+	else if (key.name == 'y'){
+	    
+	    logger.trace('Beginning resync.');
+	    
+	    var json = getTracking();
+	    if (!json) process.exit(1);
+	    
+	    json.migrations = [];
+	    
+	    var files = fs.readdirSync(directory);
+	    
+	    for (var i = 0; i < files.length; i++){
+		var file = files[i];
+		var date = file.split('.');
+		var extension = date.pop();
+		date = parseInt(date);
+		
+		if (extension !== 'js') continue;
+		
+		var description = require('./' + directory + '/' + file);
+		if (description.description === undefined){
+		    logger.error('Migration file %s exists but does not export a description. Aborting resync.', file);
+		    process.exit(1);
+		}
+		
+		description = description.description;
+		
+		json.migrations.push({date : new Date(date).toDateString(), file : file, description : description});
+	    }
+	    
+	    fs.writeFileSync(tracking, JSON.stringify(json, null, 4));
+	    logger.trace('Finished resync.');
+	}
+    });
 }
 
 program
@@ -74,14 +124,40 @@ function status(){
 	var outdated = json.migrations.length - 1 - json.version[env];
 	
 	if (outdated){
+	    
 	    logger.trace('The %s environment is %s version%s behind.', env, outdated, (outdated > 1 ? 's' : ''));
-	
-	    for (var i = json.version[env]; i < json.migrations.length - 1; i++){
+	    
+	    for (var i = json.version[env] + 1; i < json.migrations.length; i++){
 		logger.trace('(%s) %s: %s', i + 1, json.migrations[i].date, json.migrations[i].description);
 	    }
 	}
 	else logger.trace('The %s environment is up to date.', env);
     }
+}
+
+program
+.command('list')
+.description('Lists all migrations from tracking file to console. Current version will be blue.')
+.action(list)
+
+function list(){
+    
+    var json = getTracking();
+    if (!json) process.exit(1);
+    
+    if (json.version[env] === -1) logger.debug('Unversioned.');
+    else logger.trace('Unversioned.');
+    
+    for (var i = 0; i < json.migrations.length; i++){
+	
+	var msg = json.migrations[i].date + ' (' + json.migrations[i].file + '): ' + json.migrations[i].description;
+	
+	if (json.version[env] === i) logger.debug(msg);
+	else logger.trace(msg);
+    }
+    
+    process.exit(1);
+    
 }
 
 program
@@ -234,6 +310,7 @@ function processQueue(queue, index, json, finishcb){
 	if (error) {
 	    logger.error('There was an error. Stopping at version %s', json.version[env]);
 	    fs.writeFileSync(tracking, JSON.stringify(json, null, 4));
+	    process.exit(1);
 	}
 	else {
 	    json.version[env] = queue[index].index;
@@ -329,6 +406,36 @@ function getTracking(){
 	return null;
     }
     else return json;
+}
+
+function generateTemplate(){
+    
+    var template = '' +
+    
+    "exports.up = function(mysql, next){" + "\n\n" +
+
+	"\t" + "var upQuery = '';" + "\n" +
+	"\t" + "run(mysql, upQuery, next);" + "\n" +
+    "}" + "\n\n" +
+
+    "exports.down = function(mysql, next){" + "\n\n" +
+
+	"\t" + "var downQuery = '';" + "\n" +
+	"\t" + "run(mysql, downQuery, next);" + "\n" +
+    "}" + "\n\n" +
+
+    "function run(mysql, query, next){" + "\n" +
+	"\t" + "mysql.query(query, function(error, info){" + "\n" +
+	    "\t\t" + "if (error){" + "\n" +
+		"\t\t\t" + "logger.error(error);" + "\n" +
+		"\t\t\t" + "logger.error(query);" + "\n" +
+		"\t\t\t" + "next(error);" + "\n" +
+	    "\t\t" + "}" + "\n" +
+	    "\t\t" + "else next(null);" + "\n" +
+	"\t" + "});" + "\n" +
+    "}";
+
+    return template;    
 }
 
 program.parse(process.argv);

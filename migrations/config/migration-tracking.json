@@ -1,13 +1,13 @@
 {
     "version": {
-        "development": -1,
+        "development": 0,
         "production": -1
     },
     "migrations": [
         {
-            "file": "1341884871044.js",
-            "description": "Initial database creation.",
-            "date": "derp"
+            "date": "Tue Jul 10 2012",
+            "file": "1341950920299.js",
+            "description": "Create users table."
         }
     ]
 }

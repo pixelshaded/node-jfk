@@ -6,16 +6,15 @@ exports.up = function(mysql, next){
 
 exports.down = function(mysql, next){
     
-    var downQuery = '';
-    
+    var downQuery = '';    
     run(mysql, downQuery, next);
 }
 
 function run(mysql, query, next){
     mysql.query(query, function(error, info){
 	if (error){
-	    console.log(error);
-	    console.log(query);
+	    logger.error(error);
+	    logger.error(query);
 	    next(error);
 	}
 	else next(null);
