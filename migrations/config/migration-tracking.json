@@ -1,13 +1,7 @@
 {
     "version": {
-        "development": 0,
+        "development": -1,
         "production": -1
     },
-    "migrations": [
-        {
-            "date": "Tue Jul 10 2012",
-            "file": "1341950920299.js",
-            "description": "Create users table."
-        }
-    ]
+    "migrations": []
 }

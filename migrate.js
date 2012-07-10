@@ -21,7 +21,7 @@ process.stdin.on('keypress', function(ch, key){
 });
 
 program
-.version('0.0.1');
+.version('0.0.5');
 
 program
 .command('create [filename]')
@@ -228,7 +228,7 @@ function up(amount, options){
 
 program
 .command('down [amount]')
-.description('Migrate down an amount. If amount is blank, will rollback to first version.')
+.description('Migrate down an amount. If amount is blank, will rollback to unversioned.')
 .action(down)
 
 function down(amount, options){
@@ -412,28 +412,28 @@ function generateTemplate(){
     
     var template = '' +
     
-    "exports.up = function(mysql, next){" + "\n\n" +
+"exports.up = function(mysql, next){" + "\n\n" +
 
-	"\t" + "var upQuery = '';" + "\n" +
-	"\t" + "run(mysql, upQuery, next);" + "\n" +
-    "}" + "\n\n" +
+"    " + "var upQuery = '';" + "\n" +
+"    " + "run(mysql, upQuery, next);" + "\n" +
+"}" + "\n\n" +
 
-    "exports.down = function(mysql, next){" + "\n\n" +
+"exports.down = function(mysql, next){" + "\n\n" +
 
-	"\t" + "var downQuery = '';" + "\n" +
-	"\t" + "run(mysql, downQuery, next);" + "\n" +
-    "}" + "\n\n" +
+"    " + "var downQuery = '';" + "\n" +
+"    " + "run(mysql, downQuery, next);" + "\n" +
+"}" + "\n\n" +
 
-    "function run(mysql, query, next){" + "\n" +
-	"\t" + "mysql.query(query, function(error, info){" + "\n" +
-	    "\t\t" + "if (error){" + "\n" +
-		"\t\t\t" + "logger.error(error);" + "\n" +
-		"\t\t\t" + "logger.error(query);" + "\n" +
-		"\t\t\t" + "next(error);" + "\n" +
-	    "\t\t" + "}" + "\n" +
-	    "\t\t" + "else next(null);" + "\n" +
-	"\t" + "});" + "\n" +
-    "}";
+"function run(mysql, query, next){" + "\n" +
+"    " + "mysql.query(query, function(error, info){" + "\n" +
+"        " + "if (error){" + "\n" +
+"            " + "logger.error(error);" + "\n" +
+"            " + "logger.error(query);" + "\n" +
+"            " + "next(error);" + "\n" +
+"        " + "}" + "\n" +
+"        " + "else next(null);" + "\n" +
+"    " + "});" + "\n" +
+"}";
 
     return template;    
 }
