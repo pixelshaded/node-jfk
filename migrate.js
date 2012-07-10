@@ -183,7 +183,7 @@ function up(amount, options){
     }
     
     var startIndex = version + 1;
-    var endIndex = (amount === undefined) ? json.migrations.length - 1 : startIndex + amount;
+    var endIndex = (amount === undefined) ? json.migrations.length - 1 : startIndex + amount - 1;
     if (endIndex > json.migrations.length - 1) endIndex = json.migrations.length - 1;
     
     var queue = [];
@@ -249,7 +249,7 @@ function down(amount, options){
     }
     
     var startIndex = version;
-    var endIndex = (amount === undefined) ? 0 : startIndex - amount;
+    var endIndex = (amount === undefined) ? 0 : startIndex + 1 - amount;
     if (endIndex < 0) endIndex = 0;
     
     var queue = [];
@@ -283,7 +283,7 @@ function down(amount, options){
 	    
 	    processQueue(queue, 0, json, function(){
 		logger.trace('Finished rollbacks.');
-		if (json.version[env] == 0) json.version[env] = -1; //if we rollbacked version 0, we are unversioned
+		json.version[env] -= 1;
 		fs.writeFileSync(tracking, JSON.stringify(json, null, 4));
 	    });
 	}

@@ -1,6 +1,6 @@
 {
     "version": {
-        "development": 0,
+        "development": 1,
         "production": -1
     },
     "migrations": [
@@ -8,6 +8,11 @@
             "date": "Tue Jul 10 2012",
             "file": "1341952539423.js",
             "description": "Create users table."
+        },
+        {
+            "date": "Tue Jul 10 2012",
+            "file": "1341953218751.js",
+            "description": "Add tokens table."
         }
     ]
 }
