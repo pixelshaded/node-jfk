@@ -3,12 +3,12 @@ exports.description = "Create users table.";
 exports.up = function(mysql, next){
 
     var upQuery = 'CREATE TABLE users (' +
-	'id int PRIMARY KEY NOT NULL, ' +
+	'id int PRIMARY KEY NOT NULL AUTO_INCREMENT, ' +
 	'email varchar(254) NOT NULL, ' +
 	'password varchar(64) NOT NULL, ' +
 	'created datetime NOT NULL, ' +
 	'modified datetime NOT NULL' +
-    ')';
+    ') ENGINE = InnoDB';
     run(mysql, upQuery, next);
 }
 

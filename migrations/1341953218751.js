@@ -3,12 +3,12 @@ exports.description = "Add tokens table.";
 exports.up = function(mysql, next){
 
     var upQuery = 'CREATE TABLE tokens (' +
-	'id int PRIMARY KEY NOT NULL, ' +
+	'id int PRIMARY KEY NOT NULL AUTO_INCREMENT, ' +
 	'user_id int NOT NULL, ' +
 	'token varchar(255) NOT NULL, ' +
 	'expires datetime NOT NULL, ' +
 	'FOREIGN KEY (user_id) REFERENCES users(id) ' +
-    ')';
+    ') ENGINE = InnoDB';
     run(mysql, upQuery, next);
 }
 

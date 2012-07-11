@@ -5,7 +5,8 @@ logger = require('tracer').colorConsole({
 var fs = require('fs');
 var keypress = require('keypress');
 var env = require('./config/server.json').environment;
-var mysql = require('mysql').createConnection(require('./config/database')[env]);
+var db = require('./config/database')[env];
+var mysql = require('mysql').createConnection(db);
 var directory = 'migrations';
 var config = directory + '/config';
 var template = config + '/migration-template.js';
@@ -167,7 +168,7 @@ program
 
 function up(amount, options){    
     
-    amount = parseInt(amount);
+    if (amount !== undefined) amount = parseInt(amount);
     
     if (amount !== undefined && amount < 1){
 	logger.error('Amount must be greater than zero or undefined.');
@@ -235,7 +236,7 @@ program
 
 function down(amount, options){
     
-    amount = parseInt(amount);
+    if (amount !== undefined) amount = parseInt(amount);
     
     if (amount !== undefined && amount < 1){
 	logger.error('Amount must be greater than zero or undefined.');
