@@ -167,6 +167,8 @@ program
 
 function up(amount, options){    
     
+    amount = parseInt(amount);
+    
     if (amount !== undefined && amount < 1){
 	logger.error('Amount must be greater than zero or undefined.');
 	process.exit(1);
@@ -183,7 +185,7 @@ function up(amount, options){
     }
     
     var startIndex = version + 1;
-    var endIndex = (amount === undefined) ? json.migrations.length - 1 : startIndex + amount - 1;
+    var endIndex = amount === undefined ? json.migrations.length - 1 : startIndex + amount - 1;    
     if (endIndex > json.migrations.length - 1) endIndex = json.migrations.length - 1;
     
     var queue = [];
@@ -232,6 +234,8 @@ program
 .action(down)
 
 function down(amount, options){
+    
+    amount = parseInt(amount);
     
     if (amount !== undefined && amount < 1){
 	logger.error('Amount must be greater than zero or undefined.');
