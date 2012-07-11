@@ -7,7 +7,9 @@ exports.up = function(mysql, next){
 	'email varchar(254) NOT NULL, ' +
 	'password varchar(64) NOT NULL, ' +
 	'created datetime NOT NULL, ' +
-	'modified datetime NOT NULL' +
+	'modified datetime NOT NULL, ' +
+	'token varchar(255), ' +
+	'expires datetime' +	
     ') ENGINE = InnoDB';
     run(mysql, upQuery, next);
 }

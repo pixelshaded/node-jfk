@@ -1,46 +1,61 @@
+var loginSchema = registerSchema = { 
+    type: 'object', properties: {
+	email: { required: true, type: 'string', format: 'email' },
+	password: { required: true, type: 'string' }
+    }
+};
+
 var routes = [
-    { uri : '/login', method : 'post', name : 'auth.login', action : login },
-    { uri : '/logout', method : 'post', name : 'auth.logout', action : logout },
-    { uri : '/register', method : 'post', name : 'auth.register', action : register }
+    { uri : '/login', method : 'post', name : 'auth.login', action : login, schema: loginSchema },
+    { uri : '/register', method : 'post', name : 'auth.register', action : register, schema: registerSchema },
+    { uri : '/logout', method : 'post', name : 'auth.logout', action : logout }
 ];
 
 exports.routes = routes;
 
+var responseAPI = {
+    "internalError" : function(res) { res.json({"errors" : ["There was an unexpected error."]}, 500);},
+    "badCredentials": function(res) { res.json({"errors" : ["Incorrect login credentials."]}, 404);},
+    "errors": function(res, errors) { res.json({"errors" : errors}, 400);}
+}
+
 function login(req, res, next){
-    
-    var result = app.util.getUndefined([req.body.email, req.body.password],['email', 'password']);
-    
-    if (result) {
-	res.json({ "errors" : result}, 400);
-	return;
-    }
-    
-    if (!app.check(req.body.email).isEmail()){
-	res.json({"errors" : ["Email was not a valid email."]}, 400);
-	return;
-    }
     
     var query = 'SELECT * FROM users WHERE email = ' + app.mysql.escape(req.body.email) + ' LIMIT 1';
     
     app.mysql.query(query, function(error, results){
 	
 	if (app.util.queryFailed(error, results, query)){
-	    if (error) res.json({"errors" : ["There was an unexpected error."]}, 500);
-	    else res.json({"errors" : ["Incorrect login credentials."]}, 404);
+	    if (error) responseAPI.internalError(res);
+	    else responseAPI.badCredentials(res);
 	    return;
 	}
 	
-	var user = results[0];	
+	var user = results[0];
 	
-	//now we have the user. We need to compare the users password to our hashed password in the database
-	if (app.auth.validPassword(req.body.password, user.password)){
-	    var tokens = app.auth.generateTokens(user);
-	    res.json({"tokens" : tokens}, 200);
-	}
-	else {
-	    res.json({"errors" : ["Incorrect login credentials."]}, 404);
-	    return;
-	}
+	app.auth.validatePassword(req.body.password, user.password, function(error, valid){
+	    
+	    if (error){
+		logger.error(error);
+		responseAPI.internalError(res);
+		return;
+	    }
+	    
+	    if (valid){
+		app.auth.generateToken(user.id, function(error, token){
+		    if (error) {
+			responseAPI.internalError(res);
+		    }
+		    else{
+			res.json({"token" : token}, 200);
+		    }
+		});
+	    }
+	    else {
+		responseAPI.badCredentials(res);
+		return;
+	    }
+	});
     })
 }
 
@@ -50,18 +65,6 @@ function logout(req, res, next){
 
 function register(req, res, next){
     
-    var result = app.util.getUndefined([req.body.email, req.body.password],['email', 'password']);
-    
-    if (result) {
-	res.json({ "errors" : result}, 400);
-	return;
-    }
-    
-    if (!app.check(req.body.email).isEmail()){
-	res.json({"errors" : ["Email was not a valid email."]}, 400);
-	return;
-    }
-    
     var query = 'SELECT * FROM users WHERE email = ' + app.mysql.escape(req.body.email) + ' LIMIT 1';
     
     app.mysql.query(query, function(error, results){
@@ -70,31 +73,38 @@ function register(req, res, next){
 	
 	if (app.util.queryFailed(error, results, query, false)){
 	    if (error) {
-		res.json({"errors" : ["There was an unexpected error."]}, 500);
+		responseAPI.internalError(res);
 		return;
 	    }
 	    else {
 		app.auth.hashpassword(req.body.email, req.body.password, function(error, hash){
 		    if (error) {
 			logger.error('There was an error hashing the password.');
-			res.json({"errors" : ["There was an unexpected error."]}, 500);
+			responseAPI.internalError(res);
 			return;
 		    }
 		    else {
 			var now = new Date().toISOString();
+			
 			var query = app.format('INSERT INTO users (email, password, created, modified) VALUES (%s,"%s","%s","%s")', app.mysql.escape(req.body.email), hash, now, now);
+			
 			app.mysql.query(query, function(error, queryInfo){
 			   
 			   logger.debug('insert query');
 			   
 			   if (app.util.queryFailed(error, queryInfo, query)){
-				res.json({"errors" : ["There was an unexpected error."]}, 500);
+				responseAPI.internalError(res);
 				return;
 			   }
 			   else {
-			       var token = app.auth.generateToken();
-			       res.json({"token" : token}, 200);
-			       return;
+				app.auth.generateToken(queryInfo.insertId, function(error, token){
+				    if (error) {
+					responseAPI.internalError(res);
+				    }
+				    else{
+					res.json({"token" : token}, 200);
+				    }
+				});
 			   }
 			});
 		    }

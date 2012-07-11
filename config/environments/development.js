@@ -5,8 +5,8 @@ app.configure('development', function(){
     app.use(app.middleware.logJsonResponse);
     app.use(require('connect').json());
     app.use(app.middleware.onJsonError);    
-    app.use(express.query());
     app.use(app.middleware.paramLogger);
+    app.use(app.router.jsonValidator);
     app.use(app.router);
     app.use(app.middleware.handleUncaughtRoutes);
 });

@@ -23,30 +23,31 @@ exports.hashpassword = function(email, password, cb){
     });
 }
 
-exports.validatePassword = function(email, password, reference, cb){
-    
+exports.validatePassword = function(password, reference, cb){
+        
     bcrypt.compare(password, reference, function(err, res){
 	if (err){
-	    return cb(error);
+	    return cb(err);
 	}
 	
-	return cb(res);
+	return cb(null, res);
     });
-    
-//    this.hashpassword(email, password, function(error, hash){
-//	if (error){
-//	    return cb(error);
-//	}
-//	
-//	if (hash === reference){
-//	    return cb(null, true);
-//	}
-//	else{
-//	    return cb(null, false);
-//	}
-//    });
 }
 
-exports.generateToken = function(user){
-    //do mysql stuff
+exports.generateToken = function(userID, cb){
+    
+    var token = 'omgthatscrazy';
+    var expires = new Date();
+    var query = app.format('UPDATE users SET token = "%s", expires = "%s"', token, expires.toISOString());
+    
+    app.mysql.query(query, function(error, queryInfo){
+	if (app.util.queryFailed(error, queryInfo, query)){
+	    if (error) cb(error);
+	    else cb('Could not add token to user.');
+	}
+	else {
+	    cb(null, token);
+	}
+    });
+    
 }

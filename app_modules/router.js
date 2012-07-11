@@ -14,6 +14,27 @@ module.exports = function(approuter){
 	if (relative) return route.uri;
 	else return app.config.server.domain + route.uri;
     }
+    
+    router.jsonValidator = function(req, res, next){
+	
+	var route = findRouteByUri(req.url, req.method.toLowerCase());
+
+	if (route && route.schema !== undefined){
+	    app.jsonValidator.validate(req.body, route.schema, {singleError: false}, function(error){
+		if (error){
+		    
+		    res.json({"errors" : error.getMessages()}, 400);
+		    return;
+		}
+		else {
+		    next();
+		}
+	    });
+	}
+	else {
+	    next();
+	}
+    }
 
     app.util.foreachFileInTreeSync(app.config.cwd + app.config.folders.controller, processControllers);
     
