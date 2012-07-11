@@ -10,5 +10,7 @@
     , "validator" : "0.4.9"
     , "commander" : "1.0.0"
     , "keypress" : "0.0.2"
+    , "bcrypt" : ">=0.5.x"
+    , "format" : "0.1.4"
   }
 }

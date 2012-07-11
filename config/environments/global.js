@@ -11,4 +11,5 @@ app.configure(function(){
     app.check = require('validator').check;
     app.sanitize = require('validator').sanitize;
     app.auth = require(app.config.cwd + app.config.folders.app_module + '/authentication');
+    app.format = require('format').format;
 });
