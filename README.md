@@ -1,8 +1,8 @@
-#MVC-Express
+#Model Controller-Express
 Base Node Project for Lime Marketing. This is a work in progress.
 
-This is used mainly for pure json based APIs. 
-Aka does not use body/query parser out of the box (does use json middleware), but since these are native connect middlewares it can be easy to add to the framework. Also, a lot of the customized middleware is designed with only json in mind. For instance, the router is currently not designed to generate urls with a query in them.
+This is used mainly for pure json based API: in other words, no view. 
+It does not use body/query parser out of the box (does use json middleware), but since these are native connect middlewares it can be easy to add to the framework. Also, a lot of the customized middleware is designed with only json in mind. For instance, the router is currently not designed to generate urls with a query in them.
 
 This project also heavily relies on https://github.com/felixge/node-mysql. You can easily add your own ORM on top of it, but would need to change some middlewares if you didn't use mysql at all. I wanted the most flexibility and speed in terms of my mysql implementation, and most mysql ORMs are either missing too many features, too ineffecient (multiple queries for many to many relationships), or so outdated they dont work. I also wanted full control on my database schema, where a lot of ORMs are very limited on database data types.
 
