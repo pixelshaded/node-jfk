@@ -9,7 +9,7 @@ All routing is in one place: defined in every controller and given a name. This 
 
 Example:
 ```javascript
-var loginSchema = { 
+var loginSchema = registerSchema = { 
     type: 'object', properties: {
         email: { required: true, type: 'string', format: 'email' },
 	      password: { required: true, type: 'string' }
@@ -18,7 +18,7 @@ var loginSchema = {
 
 var routes = [
     { uri : '/login', method : 'post', name : 'auth.login', action : login, schema: loginSchema },
-    { uri : '/register', method : 'post', name : 'auth.register', action : register, schema: loginSchema },
+    { uri : '/register', method : 'post', name : 'auth.register', action : register, schema: registerSchema },
     { uri : '/logout', method : 'post', name : 'auth.logout', action : logout }
 ];
 
@@ -82,7 +82,7 @@ schema: loginSchema
 ```
 
 ```javascript
-var loginSchema = { 
+var loginSchema =  registerSchema = { 
     type: 'object', properties: {
         email: { required: true, type: 'string', format: 'email' },
 	password: { required: true, type: 'string' }
