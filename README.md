@@ -46,6 +46,10 @@ If you want to change where things are placed in your project, do so here. Right
 ###security
 This defines simple regex expressions (path) that if matched, require a certain role. Right now that is just ANONYMOUS or AUTHENTICATED. The difference between the two is that AUTHENTICATED routes require a valid token to be passed in post json. The order of these objects does matter. Only the first match will be considered. Token validation is handled by the firewall middleware.
 
+#Authentication
+Currently the project handles authentication in the following fashion:
+When a user logs in they are passed back a token. This token is stored in the database. On any page the requires authentication, that token should be passed by the client. The server then checks to see if that token exists in the user table and is has not expired. If it has expired, the firewall will nullify the token and notify the client that their token expired in a response. Otherwise, it will bind the user to the request and continue to the router. Tokens are also sent to the client on registration.
+
 #Routing
 All routing is in one place: defined in every controller and given a name. This is powerful because you can group your routes together by function or category (the controller itself), and see the functionality and routing all in the same place.
 
