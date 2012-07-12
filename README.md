@@ -43,22 +43,39 @@ Config files are hardwired to the config folder. They are loaded in the app.js b
 
 ##Folder Structure
 
-###Dist
-Dist contains server specific configurations (like database, domain name, etc). You simply need to copy to copy these to the config folder and remove the dist extension.
-
 ###Environment
 This contains your express environment configuration, aka app.configure(). The global environment is loaded first, and then your specific environment is loaded afterwards. The environment is set inside the server.json file. Typically, I will bind all my global objects in the global environment, and leave any middleware to the actual environment files so I have full control on middleware flow. For instance, I would add node-mysql module to app.mysql in the global environment, but not say a session store for connect.
 
 ##config.json
-
-###auth
-These are the settings for how passwords and tokens are generated / hashed. I use https://github.com/h2non/jsHashes for the hashing algorithms. The algorithm string is simply used as an object key to call the corresponding function from jshashes.
 
 ###folders
 If you want to change where things are placed in your project, do so here. Right now controllers and app_modules folders are editable.
 
 ###security
 This defines simple regex expressions (path) that if matched, require a certain role. Right now that is just ANONYMOUS or AUTHENTICATED. The difference between the two is that AUTHENTICATED routes require a valid token to be passed in post json. The order of these objects does matter. Only the first match will be considered. Token validation is handled by the firewall middleware.
+
+##server.json.dis
+This file represents your server configuration (domain, port, database, authentication options, etc)
+
+###env
+The environment for the entire project. This is used over app.settings.env (should be interchangeable)
+
+###database
+The mysql database information for node-mysql.
+
+###auth
+Contains settings for token generation and password hashing.
+
+###auth.password.saltformat
+This string represents how the password will be sorted. It uses https://github.com/baryon/node-tinytim to create a formatting template. The object that gets passed to tinytim has these properties:
+* email
+* password
+* salt
+Therefore you could create a format string like so:
+```code
+"saltformat" : "{{email}}jfkdi{{salt}}1930k{{password}}"
+```
+This exists so each server can use its own custom salting formula.
 
 #Authentication
 Currently the project handles authentication in the following fashion:
