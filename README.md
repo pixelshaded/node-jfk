@@ -4,6 +4,16 @@ Base Node APP for Lime Node Projects. This is a work in progress.
 This is used mainly for pure json based APIs. 
 Aka does not use body/query parser out of the box (does use json middleware), but since these are native connect middlewares it can be easy to add to the framework. Also, a lot of the customized middleware is designed with only json in mind. For instance, the router is currently not designed to generate urls with a query in them.
 
+#Install
+This is not a node module at the moment. Simple clone the git repo.
+
+#Running
+```code
+node server
+```
+
+Note that this uses the vhost connect middleware. If you want to change the domain name, edit the server.js in the root and update your etc/hosts file.
+
 #Config
 Config files are hardwired to the config folder. They are loaded in the app.js before environments and bound to the app.
 
@@ -18,13 +28,13 @@ This contains your express environment configuration, aka app.configure(). The g
 ##config.json
 
 ###auth
-These are the settings for how passwords and tokens are generated / hashed. I use https://github.com/h2non/jsHashes for the hashing algorithms. The algorithm sting is simply used as an object key to call the corresponding function from the library.
+These are the settings for how passwords and tokens are generated / hashed. I use https://github.com/h2non/jsHashes for the hashing algorithms. The algorithm string is simply used as an object key to call the corresponding function from jshashes.
 
 ###folders
-If you want to change where things are placed in your project, do so here. Right now controllers and app_modules are editable.
+If you want to change where things are placed in your project, do so here. Right now controllers and app_modules folders are editable.
 
 ###security
-This defines simple regex expressions (path) that if matched, require a certain role. Right now that is just ANONYMOUS or AUTHENTICATED. The difference between the two is that AUTHENTICATED routes require a valid token to be passed in post json. The order of these objects does matter. Only the first match will be considered.
+This defines simple regex expressions (path) that if matched, require a certain role. Right now that is just ANONYMOUS or AUTHENTICATED. The difference between the two is that AUTHENTICATED routes require a valid token to be passed in post json. The order of these objects does matter. Only the first match will be considered. Token validation is handled by the firewall middleware.
 
 #Routing
 All routing is in one place: defined in every controller and given a name. This is powerful because you can group your routes together by function or category (the controller itself), and see the functionality and routing all in the same place.
