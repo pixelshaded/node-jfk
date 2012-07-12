@@ -71,6 +71,7 @@ This string represents how the password will be sorted. It uses https://github.c
 * email
 * password
 * salt
+* 
 Therefore you could create a format string like so:
 ```code
 "saltformat" : "{{email}}jfkdi{{salt}}1930k{{password}}"
