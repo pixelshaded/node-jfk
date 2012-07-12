@@ -7,9 +7,11 @@ exports.prefix = '/main';
 exports.routes = routes;
 
 function index(req, res, next){
-    res.render('index.html.twig', { title: 'Main Controller: Index' });
+    res.json({"page" : "Main Controller Index"}, 200);
+    next();
 }
 
 function test(req, res, next){
-    res.render('index.html.twig', { title: 'Main Controller: Test' });
+    res.json({"page" : "Main Controller Test"}, 200);
+    next();
 }

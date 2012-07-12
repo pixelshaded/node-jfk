@@ -121,6 +121,7 @@ exports.firewall = function(req, res, next){
 			return;
 		    }
 		    else {
+			req.user = user;
 			next();
 		    }
 		})
