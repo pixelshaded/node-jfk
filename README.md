@@ -158,28 +158,28 @@ This folder contains all the services for your app. These are normally bound to 
 ###Authentication
 Contains the logic for password and token hashing/generation and password validation.
 * **hashpassword(email, password, callback)**
-* validatePassword(email, password, reference, callback)
-* generateToken(userID, callback)
+* **validatePassword(email, password, reference, callback)**
+* **generateToken(userID, callback)**
 
 ###Middleware
 Contains all middleware functions
-* requestLogger: logs incoming requests
-* paramLogger: logs req.body or req.query (post, get, or json params)
-* handleUncaughtRoutes: sends a generate response when no routes are caught by router middleware
-* logJsonResponse: extends res.json to log outgoing json and response time in ms (requires requestLogger for time)
-* onJsonError: should go right after connect.json. Catches any errors from json middleware and sends a response.
-* firewall: handles user authentication based on role. Sends response on failure.
+* **requestLogger**: logs incoming requests
+* **paramLogger**: logs req.body or req.query (post, get, or json params)
+* **handleUncaughtRoutes**: sends a generate response when no routes are caught by router middleware
+* **logJsonResponse**: extends res.json to log outgoing json and response time in ms (requires requestLogger for time)
+* **onJsonError**: should go right after connect.json. Catches any errors from json middleware and sends a response.
+* **firewall**: handles user authentication based on role. Sends response on failure.
 
 ###Router
 This is normally loaded in app right after config. This will scan controllers and store data and bind routes to express.
-* jsonValidator: middleware for validating request schema. relies on private function findRouteByUri
-* generateURL(name): will create relative or absolute url based on passed route name. Defaults '/' if no route exists.
+* **jsonValidator**: middleware for validating request schema. relies on private function findRouteByUri
+* **generateURL(name)**: will create relative or absolute url based on passed route name. Defaults '/' if no route exists.
 
 ###Utilities
 Functions I found usefull that I use throughout my app.
-* getUndefined(objects[], names[]): takes an array of objects and string names. Will return array of error strings for each undefined object.
-* queryFailed(error, data, query, logNoResult = true): used in the callback of a node-mysql query. Checks for errors, unaffected rows, and empty results. If empty results or unaffected rows are not considered an error for your query, set logNoResult boolean to false (default true).
-* foreachFileInTreeSync(folderPath, func): give it a starting folder and it will recursively go through each file in all sub folders and pass the sent function the path and filename.
+* **getUndefined(objects[], names[])**: takes an array of objects and string names. Will return array of error strings for each undefined object.
+* **queryFailed(error, data, query, logNoResult = true)**: used in the callback of a node-mysql query. Checks for errors, unaffected rows, and empty results. If empty results or unaffected rows are not considered an error for your query, set logNoResult boolean to false (default true).
+* **foreachFileInTreeSync(folderPath, func)**: give it a starting folder and it will recursively go through each file in all sub folders and pass the sent function the path and filename.
 
 #Migrations
 The project supports database migrations. This does have some limitations. Since database structure queries cannot be handled in transactions, they need to be handled one at a time. In other words, there is no way to define many table alterations in one migration, and if one query fails, rollback. This means each migration can only have one query. Its a pain, but when needing to do alterations where keeping my data is not important, I simply roll back before the migration, update the query, and migration up to current version.
