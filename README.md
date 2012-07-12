@@ -1,15 +1,12 @@
-MVC-Express
-===========
-
-Base Node APP for Lime Node Projects
+#MVC-Express
+Base Node APP for Lime Node Projects. This is a work in progress.
 
 This is used mainly for pure json based APIs. 
 Aka does not use body/query parser out of the box (does use json middleware), but since these are native connect
 middlewares it can be easy to add to the framework. Also, a lot of the customized middleware is designed with only
 json in mind. For instance, the router is currently not designed to generate urls with a query in them.
 
-Routing
-===========
+#Routing
 All routing is in one place: defined in every controller and given a name. This is powerful because you can group
 your routes together by function or category (the controller itself), and see the functionality and routing all
 in the same place.
@@ -35,15 +32,15 @@ exports.prefix = "/auth";
 Two things are exported so the extended router can map out the routes: routes and prefix. Prefix is optional and its
 purpose is to prepend all your routes with a string.
 
-#Route Object
+##Route Object
 
-##uri
+###uri
 The path you want the action function mapped to.
 
-##method
+###method
 post or get are the only supported methods at the moment
 
-##name
+###name
 The names are unique strings for your routes. You can use these names to ask the router for a URL through out your program.
 
 ```javascript
@@ -57,7 +54,7 @@ generate it for your modules during environment configuration.
 Note that the router will use the server.json file in the config folder to create absolute URLs, so make sure your domain
 is properly defined there.
 
-##action
+###action
 Arguments will normally be function(req, res, next) like any middleware.
 
 Actions are the function definitions within the controller that the router will call when the route is matched. Under
@@ -65,7 +62,7 @@ the hood, the router just uses express to call app.get or app.post and passes yo
 after the export need to be function name() rather than var name = function(), otherwise they will be undefined when the
 router does its mapping.
 
-##schema - optional
+###schema - optional
 This is a schema object. I use https://github.com/Baggz/Amanda for json validation. The jsonValidator on the router is
 placed a middleware after the json parser and uses the schema object to valid incoming json from the request body. This
 is powerful because your json api is almost self documenting. You can define your request API in a schema and it is 
