@@ -67,10 +67,11 @@ The mysql database information for node-mysql.
 Contains settings for token generation and password hashing.
 
 ###auth.password.saltformat
-This string represents how the password will be sorted. It uses https://github.com/baryon/node-tinytim to create a formatting template. The object that gets passed to tinytim has these properties:
+This string represents how the password will be salted. It uses https://github.com/baryon/node-tinytim to create a formatting template. The object that gets passed to tinytim has these properties:
 * email
 * password
 * salt
+
 Therefore you could create a format string like so:
 
 ```code
