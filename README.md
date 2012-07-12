@@ -54,8 +54,8 @@ If you want to change where things are placed in your project, do so here. Right
 ###security
 This defines simple regex expressions (path) that if matched, require a certain role. Right now that is just ANONYMOUS or AUTHENTICATED. The difference between the two is that AUTHENTICATED routes require a valid token to be passed in post json. The order of these objects does matter. Only the first match will be considered. Token validation is handled by the firewall middleware.
 
-##server.json.dis
-This file represents your server configuration (domain, port, database, authentication options, etc)
+##server.json.dist
+This file represents your server configuration (domain, port, database, authentication options, etc). You need to remove the dist extension to use it.
 
 ###env
 The environment for the entire project. This is used over app.settings.env (should be interchangeable)
