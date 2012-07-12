@@ -8,7 +8,8 @@ exports.up = function(mysql, next){
 	'password varchar(88) NOT NULL, ' +
 	'created datetime NOT NULL, ' +
 	'modified datetime NOT NULL, ' +
-	'token varchar(255), ' +
+	'token varchar(88), ' +
+	'apn varchar(64) NOT NULL, ' +
 	'expires datetime' +	
     ') ENGINE = InnoDB';
     run(mysql, upQuery, next);

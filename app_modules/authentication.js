@@ -26,12 +26,12 @@ exports.validatePassword = function(email, password, reference, cb){
     });
 }
 
-exports.generateToken = function(userID, cb){
+exports.generateToken = function(userID, apn, cb){
     
     var token = new hasher[config.token.algorithm]().b64(config.token.secret + app.Date.now().toString() + Math.floor((Math.random() * 1000)));
     var expires = new app.Date();
     expires.add(config.token.lifespan);
-    var query = app.format('UPDATE users SET token = "%s", expires = "%s"', token, expires.toDBString());
+    var query = app.format('UPDATE users SET token = "%s", expires = "%s", apn = %s', token, expires.toDBString(), app.mysql.escape(apn));
     
     app.mysql.query(query, function(error, queryInfo){
 	if (app.util.queryFailed(error, queryInfo, query)){

@@ -1,7 +1,8 @@
 var loginSchema = registerSchema = { 
     type: 'object', properties: {
 	email: { required: true, type: 'string', format: 'email' },
-	password: { required: true, type: 'string' }
+	password: { required: true, type: 'string' },
+	apn: { required: true, type: 'string', length: 64}
     }
 };
 
@@ -20,7 +21,7 @@ function login(req, res, next){
     
     app.mysql.query(query, function(error, results){
 	
-	if (app.util.queryFailed(error, results, query)){
+	if (app.util.queryFailed(error, results, query, false)){
 	    if (error) app.responseAPI.internalError(res);
 	    else app.responseAPI.badCredentials(res);
 	    return;
@@ -37,7 +38,7 @@ function login(req, res, next){
 	    }
 	    
 	    if (valid){
-		app.auth.generateToken(user.id, function(error, token){
+		app.auth.generateToken(user.id, req.body.apn, function(error, token){
 		    if (error) {
 			app.responseAPI.internalError(res);
 		    }
@@ -100,7 +101,7 @@ function register(req, res, next){
 				return;
 			   }
 			   else {
-				app.auth.generateToken(queryInfo.insertId, function(error, token){
+				app.auth.generateToken(queryInfo.insertId, req.body.apn, function(error, token){
 				    if (error) {
 					app.responseAPI.internalError(res);
 				    }

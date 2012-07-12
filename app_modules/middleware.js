@@ -93,7 +93,8 @@ exports.firewall = function(req, res, next){
 	
 	var schema = {
 	    type: 'object', properties : {
-		token : { required : true, type : 'string', length : 88}
+		token : { required : true, type : 'string', length : 88},
+		apn: { required : true, type : 'string', length: 64}
 	    }
 	};
 	
@@ -103,7 +104,7 @@ exports.firewall = function(req, res, next){
 		return;
 	    }
 	    else {
-		var query = app.format('SELECT * FROM users WHERE token = %s', app.mysql.escape(req.body.token));
+		var query = app.format('SELECT * FROM users WHERE token = %s AND apn = %s', app.mysql.escape(req.body.token), app.mysql.escape(req.body.apn));
 		app.mysql.query(query, function(error, results){
 		    if (app.util.queryFailed(error, results, query, false)){
 			if (error) {

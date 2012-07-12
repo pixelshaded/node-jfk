@@ -4,8 +4,8 @@ logger = require('tracer').colorConsole({
 });
 var fs = require('fs');
 var keypress = require('keypress');
-var env = require('./config/server.json').environment;
-var db = require('./config/database')[env];
+var env = require('./config/server.json').env;
+var db = require('./config/server')[env].database;
 var mysql = require('mysql').createConnection(db);
 var directory = 'migrations';
 var config = directory + '/config';
