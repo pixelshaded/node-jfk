@@ -1,5 +1,5 @@
 { 
     "environment": "development",
-    "development": { "domain" : "10.0.1.137"}, 
-    "production": { "domain" : "meetsync.com"}
+    "development": { "domain" : "dev.meetsync.com", "port" : 3000}, 
+    "production": { "domain" : "www.meetsync.com", "port" : 80}
 }
