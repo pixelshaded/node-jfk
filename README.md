@@ -16,7 +16,7 @@ git clone git://github.com/pixelshaded/MVC-Express.git
 node server
 ```
 
-Note that this uses the vhost connect middleware. If you want to change the domain name, edit the server.js in the root and update your etc/hosts file. If you don't want to use vhosts, simply uncomment the listen function in app and run
+Note that this uses the vhost connect middleware. If you want to change the domain name, edit the server.json in the config folder and update your etc/hosts file. If you don't want to use vhosts, simply uncomment the listen function in app and run
 
 ```code
 node app
