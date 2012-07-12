@@ -27,10 +27,10 @@ exports.prefix = "/auth";
 ```
 ##Exports
 
-#exports.routes
+###exports.routes
 The array containing all your route objects.
 
-#exports.prefix - optional
+###exports.prefix - optional
 A string to be prepended to each uri.
 
 ##Route Object
