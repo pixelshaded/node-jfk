@@ -157,7 +157,7 @@ This folder contains all the services for your app. These are normally bound to 
 
 ###Authentication
 Contains the logic for password and token hashing/generation and password validation.
-* hashpassword(email, password, callback)
+* **hashpassword(email, password, callback)**
 * validatePassword(email, password, reference, callback)
 * generateToken(userID, callback)
 
