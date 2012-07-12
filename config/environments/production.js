@@ -4,6 +4,7 @@ app.configure('production', function(){
     app.use(require('connect').json());
     app.use(app.middleware.onJsonError);    
     app.use(app.router.jsonValidator);
+    app.use(app.middleware.firewall);
     app.use(app.router);
     app.use(app.middleware.handleUncaughtRoutes);
 });

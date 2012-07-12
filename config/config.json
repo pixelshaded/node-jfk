@@ -16,9 +16,9 @@
 	"app_module": "/app_modules",
 	"entity": "/app/entities"
     }
-    , "firewall" : {
-	"whitelist" : [
-	    
-	]
-    }
+    , "security" : [
+	{ "path" : "/auth/logout.*", "role" : "AUTHENTICATED"},
+	{ "path" : "/auth/.*", "role" : "ANONYMOUS"},
+	{ "path" : "/.*", "role" : "AUTHENTICATED"}
+    ]
 }

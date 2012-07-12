@@ -7,6 +7,7 @@ app.configure('development', function(){
     app.use(app.middleware.onJsonError);    
     app.use(app.middleware.paramLogger);
     app.use(app.router.jsonValidator);
+    app.use(app.middleware.firewall);
     app.use(app.router);
     app.use(app.middleware.handleUncaughtRoutes);
 });

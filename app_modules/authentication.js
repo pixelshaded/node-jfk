@@ -25,7 +25,7 @@ exports.validatePassword = function(email, password, reference, cb){
 
 exports.generateToken = function(userID, cb){
     
-    var token = new hasher[app.config.auth.token.algorithm]().b64(app.config.auth.token.secret + app.Date.now());
+    var token = new hasher[app.config.auth.token.algorithm]().b64(app.config.auth.token.secret + app.Date.now() + Math.floor((Math.random() * 1000)));
     var expires = new app.Date();
     expires.add(app.config.auth.token.lifespan);
     logger.debug(expires);

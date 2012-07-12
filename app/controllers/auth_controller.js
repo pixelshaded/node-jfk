@@ -12,12 +12,7 @@ var routes = [
 ];
 
 exports.routes = routes;
-
-var responseAPI = {
-    "internalError" : function(res) { res.json({"errors" : ["There was an unexpected error."]}, 500);},
-    "badCredentials": function(res) { res.json({"errors" : ["Incorrect login credentials."]}, 404);},
-    "errors": function(res, errors) { res.json({"errors" : errors}, 400);}
-}
+exports.prefix = "/auth";
 
 function login(req, res, next){
     
@@ -26,8 +21,8 @@ function login(req, res, next){
     app.mysql.query(query, function(error, results){
 	
 	if (app.util.queryFailed(error, results, query)){
-	    if (error) responseAPI.internalError(res);
-	    else responseAPI.badCredentials(res);
+	    if (error) app.responseAPI.internalError(res);
+	    else app.responseAPI.badCredentials(res);
 	    return;
 	}
 	
@@ -37,14 +32,14 @@ function login(req, res, next){
 	    
 	    if (error){
 		logger.error(error);
-		responseAPI.internalError(res);
+		app.responseAPI.internalError(res);
 		return;
 	    }
 	    
 	    if (valid){
 		app.auth.generateToken(user.id, function(error, token){
 		    if (error) {
-			responseAPI.internalError(res);
+			app.responseAPI.internalError(res);
 		    }
 		    else{
 			res.json({"token" : token}, 200);
@@ -52,7 +47,7 @@ function login(req, res, next){
 		});
 	    }
 	    else {
-		responseAPI.badCredentials(res);
+		app.responseAPI.badCredentials(res);
 		return;
 	    }
 	});
@@ -60,25 +55,37 @@ function login(req, res, next){
 }
 
 function logout(req, res, next){
-    res.json('logout');
+    //the firewall will always validate that we have a token
+    
+    var query = app.format('UPDATE users SET token = null WHERE token = %s', app.mysql.escape(req.body.token));
+    
+    app.mysql.query(query, function(error, queryInfo){
+	if (app.util.queryFailed(error, queryInfo, query)){
+	    if (queryInfo.affectedRows === 0) logger.error('Logging out did not unset the token.');    
+	    app.responseAPI.internalError(res);
+	}
+	else {
+	    res.json({}, 200);
+	}
+    });
 }
 
 function register(req, res, next){
     
-    var query = 'SELECT * FROM users WHERE email = ' + app.mysql.escape(req.body.email) + ' LIMIT 1';
+    var query = app.format('SELECT * FROM users WHERE email = %s LIMIT 1', app.mysql.escape(req.body.email));
     
     app.mysql.query(query, function(error, results){
 	
 	if (app.util.queryFailed(error, results, query, false)){
 	    if (error) {
-		responseAPI.internalError(res);
+		app.responseAPI.internalError(res);
 		return;
 	    }
 	    else {
 		app.auth.hashpassword(req.body.email, req.body.password, function(error, hash){
 		    if (error) {
 			logger.error('There was an error hashing the password.');
-			responseAPI.internalError(res);
+			app.responseAPI.internalError(res);
 			return;
 		    }
 		    else {
@@ -89,13 +96,13 @@ function register(req, res, next){
 			app.mysql.query(query, function(error, queryInfo){
 			   
 			   if (app.util.queryFailed(error, queryInfo, query)){
-				responseAPI.internalError(res);
+				app.responseAPI.internalError(res);
 				return;
 			   }
 			   else {
 				app.auth.generateToken(queryInfo.insertId, function(error, token){
 				    if (error) {
-					responseAPI.internalError(res);
+					app.responseAPI.internalError(res);
 				    }
 				    else{
 					res.json({"token" : token}, 200);

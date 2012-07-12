@@ -73,3 +73,62 @@ exports.onJsonError = function(err, req, res, next){
     }
     else next();
 }
+
+exports.firewall = function(req, res, next){
+    
+    var paths = app.config.security;
+    var role = '';
+    
+    for (var i = 0; i < paths.length; i++){
+	if (req.url.match(paths[i].path)){
+	    role = paths[i].role;
+	    break;
+	}
+    }
+    
+    console.log('\033[90mREQUIRED ROLE: %s\033[0m', role);
+    
+    if (role === 'ANONYMOUS') next();
+    else if (role === 'AUTHENTICATED') {
+	
+	var schema = {
+	    type: 'object', properties : {
+		token : { required : true, type : 'string', length : 88}
+	    }
+	};
+	
+	app.jsonValidator.validate(schema, req.body, {singleError: false}, function(errors){
+	    if (errors) {
+		res.json({"errors" : errors.getMessages()}, 400);
+		return;
+	    }
+	    else {
+		var query = app.format('SELECT * FROM users WHERE token = %s', app.mysql.escape(req.body.token));
+		app.mysql.query(query, function(error, results){
+		    if (app.util.queryFailed(error, results, query, false)){
+			if (error) {
+			    app.responseAPI.internalError(res);
+			    return;
+			}
+			
+			app.responseAPI.invalidToken(res);
+			return;
+		    }
+		    
+		    var user = results[0];
+		    if (app.Date.compare(new app.Date(), user.expires) == 1){
+			app.responseAPI.expiredToken(res);
+			return;
+		    }
+		    else {
+			next();
+		    }
+		})
+	    }
+	});
+    }
+    else {
+	logger.warning('Role %s is not supported by the firewall. Using ANONYMOUS.', role);
+	next();
+    }
+}

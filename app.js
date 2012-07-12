@@ -16,6 +16,7 @@ app.config = require('./config/config');
 app.config.server = require('./config/server');
 app.config.mysql = require('./config/database');
 app.config.cwd = process.cwd();
+app.responseAPI = require('./config/responseAPI').responseAPI;
 
 app.settings.env = app.config.server.environment;
 
