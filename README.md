@@ -4,6 +4,8 @@ Base Node APP for Lime Node Projects. This is a work in progress.
 This is used mainly for pure json based APIs. 
 Aka does not use body/query parser out of the box (does use json middleware), but since these are native connect middlewares it can be easy to add to the framework. Also, a lot of the customized middleware is designed with only json in mind. For instance, the router is currently not designed to generate urls with a query in them.
 
+This project also heavily relies on https://github.com/felixge/node-mysql. You can easily add your own ORM on top of it, but would need to change some middlewares if you didn't use mysql at all. I wanted the most flexibility and speed in terms of my mysql implementation, and most mysql ORMs are either missing too many features, too ineffecient (multiple queries for many to many relationships), or so outdated they dont work. I also wanted full control on my database schema, where a lot of ORMs are very limited on database data types.
+
 #Install
 This is not a node module / npm package at the moment. Simply clone the git repo and use it however you like.
 
@@ -16,7 +18,7 @@ git clone git://github.com/pixelshaded/MVC-Express.git
 node server
 ```
 
-Note that this uses the vhost connect middleware. If you want to change the domain name, edit the server.json in the config folder and update your etc/hosts file. If you don't want to use vhosts, simply uncomment the listen function in app and run
+Note that this uses the vhost connect middleware. If you want to change the domain name, edit the server.json in the config folder and update your etc/hosts file if using apache. If you don't want to use vhosts, simply uncomment the listen function in app and run
 
 ```code
 node app
@@ -130,3 +132,33 @@ var loginSchema =  registerSchema = {
 };
 ```
 This is a schema object. I use https://github.com/Baggz/Amanda for json validation. These should be defined above the route definitions so they are not undefined when the router processes the controller. The jsonValidator on the router is placed as a middleware after the json parser and uses the schema object to validate incoming json from the request body. This is powerful because your json api is almost self documenting. You can define your request API in a schema and it is automatically validated when a route a matched that contains it. A response is automatically generated on errors, before your routing functions are ever called. In otherwords, you can keep all validation out of your actions so they are cleaner.
+
+#App Modules
+This folder contains all the services for your app. These are normally bound to app in the app.js or global environment.
+
+###Authentication
+Contains the logic for password and token hashing/generation and password validation.
+* hashpassword(email, password, callback)
+* validatePassword(email, password, reference, callback)
+* generateToken(userID, callback)
+
+###Middleware
+Contains all middleware functions
+* requestLogger: logs incoming requests
+* paramLogger: logs req.body or req.query (post, get, or json params)
+* handleUncaughtRoutes: sends a generate response when no routes are caught by router middleware
+* logJsonResponse: extends res.json to log outgoing json and response time in ms (requires requestLogger for time)
+* onJsonError: should go right after connect.json. Catches any errors from json middleware and sends a response.
+* firewall: handles user authentication based on role. Sends response on failure.
+
+###Router
+This is normally loaded in app right after config. This will scan controllers and store data and bind routes to express.
+* jsonValidator: middleware for validating request schema. relies on private function findRouteByUri
+* generateURL(name): will create relative or absolute url based on passed route name. Defaults '/' if no route exists.
+
+###Utilities
+Functions I found usefull that I use throughout my app.
+* getUndefined(objects[], names[]): takes an array of objects and string names. Will return array of error strings for each undefined object.
+* queryFailed(error, data, query, logNoResult = true): used in the callback of a node-mysql query. Checks for errors, unaffected rows, and empty results. If empty results or unaffected rows are not considered an error for your query, set logNoResult boolean to false (default true).
+* foreachFileInTreeSync(folderPath, func): give it a starting folder and it will recursively go through each file in all sub folders and pass the sent function the path and filename.
+
