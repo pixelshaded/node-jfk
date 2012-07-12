@@ -1,5 +1,5 @@
 #MVC-Express
-Base Node APP for Lime Node Projects. This is a work in progress.
+Base Node Project for Lime Marketing. This is a work in progress.
 
 This is used mainly for pure json based APIs. 
 Aka does not use body/query parser out of the box (does use json middleware), but since these are native connect middlewares it can be easy to add to the framework. Also, a lot of the customized middleware is designed with only json in mind. For instance, the router is currently not designed to generate urls with a query in them.
