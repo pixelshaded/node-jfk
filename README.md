@@ -52,7 +52,9 @@ This contains your express environment configuration, aka app.configure(). The g
 If you want to change where things are placed in your project, do so here. Right now controllers and app_modules folders are editable.
 
 ###security
-This defines simple regex expressions (path) that if matched, require a certain role. Right now that is just ANONYMOUS or AUTHENTICATED. The difference between the two is that AUTHENTICATED routes require a valid token to be passed in post json. The order of these objects does matter. Only the first match will be considered. Token validation is handled by the firewall middleware.
+This defines simple regex expressions (path) that if matched, require a certain role. Right now that is just ANONYMOUS or AUTHENTICATED. The difference between the two is that AUTHENTICATED routes require a valid token to be passed in post json. The order of these objects does matter. Only the first match will be considered. Token and client validation is handled by the firewall middleware.
+
+Note that if you make all paths require AUTHENTICATED role, they will hit the firewall middleware before they hit the handleUncaughtRoutes middleware. In other words, they could make a request to a route that has no action, but would recieve a response indicating that they could not be authenticated. You may or may not want this, and it just depends on how you set up your security.
 
 ##server.json.dist
 This file represents your server configuration (domain, port, database, authentication options, etc). You need to remove the dist extension to use it.
@@ -84,8 +86,8 @@ Currently the project handles authentication in the following fashion:
 
 When a user registers or logs in, their client id is added or updated in the database and they are returned a random token. Whenever the client makes a request to a page that requires authentication, they must pass the random token along with their client id. If the token and client exist in the same row in user table (and the token has not expired), that user info is bound to req.user and they are allowed to continue to the route action. Otherwise they recieve an error response.
 
-The schema for pages requiring AUTHENTICATED role:
-```code
+The schema for routes requiring AUTHENTICATED role:
+```javascript
 var schema = {
     type: 'object', properties : {
 		token : { required : true, type : 'string', length : 88},
