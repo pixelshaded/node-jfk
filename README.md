@@ -11,8 +11,8 @@ Example:
 ```javascript
 var loginSchema = registerSchema = { 
     type: 'object', properties: {
-	email: { required: true, type: 'string', format: 'email' },
-	password: { required: true, type: 'string' }
+		email: { required: true, type: 'string', format: 'email' },
+		password: { required: true, type: 'string' }
     }
 };
 
@@ -84,8 +84,8 @@ schema: loginSchema
 ```javascript
 var loginSchema =  registerSchema = { 
     type: 'object', properties: {
-	email: { required: true, type: 'string', format: 'email' },
-	password: { required: true, type: 'string' }
+		email: { required: true, type: 'string', format: 'email' },
+		password: { required: true, type: 'string' }
     }
 };
 ```
