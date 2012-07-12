@@ -82,7 +82,7 @@ This exists so each server can use its own custom salting formula.
 #Authentication
 Currently the project handles authentication in the following fashion:
 
-When a user logs in they are passed back a token. This token is stored in the database. On any page the requires authentication, the token should be passed in the request by the client. The server then checks to see if that token exists in the user table and has not expired. If it has expired, the firewall will nullify the token and notify the client that their token expired in a response. Otherwise, it will bind the user to the request and continue to the router. Tokens are also sent to the client on registration.
+When a user registers or logs in, their apn token is added or updated in the database and they are returned a random token. Whenever the client makes a request to a page that requires authentication, they must pass the random token along with their apn. If the token and apn exist in the user table (and the token has not expired), that user info is bound to req.user and they are allowed to continue to the route action. Otherwise they recieve an error response.
 
 #Routing
 All routing is in one place: defined in every controller and given a name. This is powerful because you can group your routes together by function or category (the controller itself), and see the functionality and routing all in the same place.
