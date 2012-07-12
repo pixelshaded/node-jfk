@@ -5,14 +5,22 @@ This is used mainly for pure json based APIs.
 Aka does not use body/query parser out of the box (does use json middleware), but since these are native connect middlewares it can be easy to add to the framework. Also, a lot of the customized middleware is designed with only json in mind. For instance, the router is currently not designed to generate urls with a query in them.
 
 #Install
-This is not a node module at the moment. Simple clone the git repo.
+This is not a node module / npm package at the moment. Simply clone the git repo and use it however you like.
+
+```code
+git clone git://github.com/pixelshaded/MVC-Express.git
+```
 
 #Running
 ```code
 node server
 ```
 
-Note that this uses the vhost connect middleware. If you want to change the domain name, edit the server.js in the root and update your etc/hosts file.
+Note that this uses the vhost connect middleware. If you want to change the domain name, edit the server.js in the root and update your etc/hosts file. If you don't want to use vhosts, simply uncomment the listen function in app and run
+
+```code
+node app
+```
 
 #Config
 Config files are hardwired to the config folder. They are loaded in the app.js before environments and bound to the app.
