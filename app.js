@@ -17,6 +17,7 @@ app.config.cwd = process.cwd();
 app.config.folders = require('./config/folders');
 app.config.server = require('./config/server');
 app.config.mysql = require('./config/database');
+app.config.auth = require('./config/auth');
 
 app.settings.env = app.config.server.environment;
 

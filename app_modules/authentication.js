@@ -1,44 +1,33 @@
-var bcrypt = require('bcrypt');
+var hasher = require('jshashes');
 
 exports.hashpassword = function(email, password, cb){
-    
-    bcrypt.genSalt(10, function(err, salt){
-	
-	if (err) {
-	    cb(err);
-	    return;
-	}
-	
-	logger.debug(salt);
-	
-	bcrypt.hash(password, salt, function(err, hash){
-	    
-	    if (err){
-		cb(err);
-		return;
-	    }
-	    
-	    cb(null, hash);	    
-	});
-    });
+    var hash = new hasher[app.config.auth.password.algorithm]().b64(email + app.config.auth.password.salt + password + email + app.config.auth.password.salt);
+    cb(null, hash);
 }
 
-exports.validatePassword = function(password, reference, cb){
-        
-    bcrypt.compare(password, reference, function(err, res){
-	if (err){
-	    return cb(err);
+exports.validatePassword = function(email, password, reference, cb){
+    
+    this.hashpassword(email, password, function(error, hash){
+	if (error){
+	    cb(error);
 	}
-	
-	return cb(null, res);
+	else {
+	    
+	    if (hash === reference){
+		cb(null, true);
+	    }
+	    else {
+		cb(null, false);
+	    }
+	}
     });
 }
 
 exports.generateToken = function(userID, cb){
     
-    var token = 'omgthatscrazy';
-    var expires = new Date();
-    var query = app.format('UPDATE users SET token = "%s", expires = "%s"', token, expires.toISOString());
+    var token = new hasher[app.config.auth.token.algorithm]().b64(app.config.auth.token.secret + app.Date.now());
+    var expires = new app.Date().add(app.config.auth.token.lifespan);
+    var query = app.format('UPDATE users SET token = "%s", expires = "%s"', token, expires.getUTCDate());
     
     app.mysql.query(query, function(error, queryInfo){
 	if (app.util.queryFailed(error, queryInfo, query)){
@@ -48,6 +37,5 @@ exports.generateToken = function(userID, cb){
 	else {
 	    cb(null, token);
 	}
-    });
-    
+    });    
 }

@@ -33,7 +33,7 @@ function login(req, res, next){
 	
 	var user = results[0];
 	
-	app.auth.validatePassword(req.body.password, user.password, function(error, valid){
+	app.auth.validatePassword(user.email, req.body.password, user.password, function(error, valid){
 	    
 	    if (error){
 		logger.error(error);
@@ -69,8 +69,6 @@ function register(req, res, next){
     
     app.mysql.query(query, function(error, results){
 	
-	logger.debug('select query');
-	
 	if (app.util.queryFailed(error, results, query, false)){
 	    if (error) {
 		responseAPI.internalError(res);
@@ -89,8 +87,6 @@ function register(req, res, next){
 			var query = app.format('INSERT INTO users (email, password, created, modified) VALUES (%s,"%s","%s","%s")', app.mysql.escape(req.body.email), hash, now, now);
 			
 			app.mysql.query(query, function(error, queryInfo){
-			   
-			   logger.debug('insert query');
 			   
 			   if (app.util.queryFailed(error, queryInfo, query)){
 				responseAPI.internalError(res);
