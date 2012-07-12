@@ -162,3 +162,85 @@ Functions I found usefull that I use throughout my app.
 * queryFailed(error, data, query, logNoResult = true): used in the callback of a node-mysql query. Checks for errors, unaffected rows, and empty results. If empty results or unaffected rows are not considered an error for your query, set logNoResult boolean to false (default true).
 * foreachFileInTreeSync(folderPath, func): give it a starting folder and it will recursively go through each file in all sub folders and pass the sent function the path and filename.
 
+#Migrations
+The project supports database migrations. This does have some limitations. Since database structure queries cannot be handled in transactions, they need to be handled one at a time. In other words, there is no way to define many table alterations in one migration, and if one query fails, rollback. This means each migration can only have one query. Its a pain, but when needing to do alterations where keeping my data is not important, I simply roll back before the migration, update the query, and migration up to current version.
+
+Console commands are generated with https://github.com/visionmedia/commander.js/.
+
+### Tracking File
+Migrations are tracked within migrations/config/migration-tracking.json. This file contains current version of your environment and an array of all the migrations files.
+
+### Migration Files
+Migration files sit in the migrations folder. They are named by the datestamp when they were created. This means that should be in order by creation date.
+
+### Migration Template
+If you want to create your own template for migrations, you can do so by creating one named migration-template in the migrations/config folder. The migration script will use this when it generates new migration files.
+
+###Commands
+
+```code
+node migrate status
+```
+Gives you the current version of the environment, the latest migration version, and how many versions the environment is behind.
+
+```code
+node migrate resync
+```
+If some how the migration-tracking files becomes out of sync with the files, this command will repopulate the migrations array. It will overwrite the previous one.
+
+```code
+node migrate create [description]
+```
+Creates a migration file using the default template or the migration-template.js in the migrations/config folder. Normally all you need to do is edit the file and add your queries to the up and down function.
+
+The up function defines the query to make a change.
+The down function defines the query to undo that change.
+
+Example:
+```javascript
+exports.description = "Create users table.";
+
+exports.up = function(mysql, next){
+
+    var upQuery = 'CREATE TABLE users (' +
+	'id int PRIMARY KEY NOT NULL AUTO_INCREMENT, ' +
+	'email varchar(254) NOT NULL, ' +
+	'password varchar(88) NOT NULL, ' +
+	'created datetime NOT NULL, ' +
+	'modified datetime NOT NULL, ' +
+	'token varchar(255), ' +
+	'expires datetime' +	
+    ') ENGINE = InnoDB';
+    run(mysql, upQuery, next);
+}
+
+exports.down = function(mysql, next){
+
+    var downQuery = 'DROP TABLE users';
+    run(mysql, downQuery, next);
+}
+
+function run(mysql, query, next){
+    mysql.query(query, function(error, info){
+        if (error){
+            logger.error(error);
+            logger.error(query);
+            next(error);
+        }
+        else {
+	    logger.debug(query);
+	    next(null);
+	}
+    });
+}
+```
+
+```code
+node migrate up [amount]
+```
+This will run a certain amount of migration files. It simply runs the up function inside each one. If amount is not passed, it will run all migration files. These are essentially databse updates.
+
+```code
+node migrate down [amout]
+```
+This will run also run a certain amount of migrations files. It simply runs the down function inside each one. If amount is not passed, it will unversion the database. This undos updates.
