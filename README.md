@@ -46,7 +46,7 @@ post or get are the only supported methods at the moment
 name : 'auth.login'
 ```
 
-The names are unique strings for your routes. You can use these names to ask the router for a URL through out your program.
+The name is a unique string for your route. You can use these names to ask the router for a URL through out your program.
 
 ```javascript
 app.router.generateURL('auth.login', relative = true);
