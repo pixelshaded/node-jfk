@@ -26,8 +26,11 @@ exports.validatePassword = function(email, password, reference, cb){
 exports.generateToken = function(userID, cb){
     
     var token = new hasher[app.config.auth.token.algorithm]().b64(app.config.auth.token.secret + app.Date.now());
-    var expires = new app.Date().add(app.config.auth.token.lifespan);
-    var query = app.format('UPDATE users SET token = "%s", expires = "%s"', token, expires.getUTCDate());
+    var expires = new app.Date();
+    expires.add(app.config.auth.token.lifespan);
+    logger.debug(expires);
+    logger.debug(expires.toDBString());
+    var query = app.format('UPDATE users SET token = "%s", expires = "%s"', token, expires.toDBString());
     
     app.mysql.query(query, function(error, queryInfo){
 	if (app.util.queryFailed(error, queryInfo, query)){

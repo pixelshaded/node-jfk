@@ -3,7 +3,8 @@ app.configure(function(){
     
     app.util = require(app.config.cwd + app.config.folders.app_module + '/utilities');
     app.jsonValidator = require('amanda')('json');
-    app.Date = require('cromag');
+    
+    app.Date = require('cromag'); 
     
     var db = app.config.mysql[app.settings.env];
 
