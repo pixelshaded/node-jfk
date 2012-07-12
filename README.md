@@ -46,7 +46,7 @@ Config files are hardwired to the config folder. They are loaded in the app.js b
 ###Environment
 This contains your express environment configuration, aka app.configure(). The global environment is loaded first, and then your specific environment is loaded afterwards. The environment is set inside the server.json file. Typically, I will bind all my global objects in the global environment, and leave any middleware to the actual environment files so I have full control on middleware flow. For instance, I would add node-mysql module to app.mysql in the global environment, but not say a session store for connect.
 
-##config.json
+##app.json
 
 ###folders
 If you want to change where things are placed in your project, do so here. Right now controllers and app_modules folders are editable.
