@@ -12,7 +12,7 @@ module.exports = function(approuter){
 	}
 
 	if (relative) return route.uri;
-	else return app.config.server.domain + route.uri;
+	else return app.config.server[app.config.server.env].domain + route.uri;
     }
     
     router.jsonValidator = function(req, res, next){

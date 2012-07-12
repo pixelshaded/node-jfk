@@ -6,7 +6,7 @@ app.configure(function(){
     
     app.Date = require('cromag'); 
     
-    var db = app.config.mysql[app.settings.env];
+    var db = app.config.server[app.config.server.env].database;
 
     app.router = require(app.config.cwd + app.config.folders.app_module + '/router')(app.router);
     app.middleware = require(app.config.cwd + app.config.folders.app_module + '/middleware');
