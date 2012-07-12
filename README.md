@@ -82,7 +82,17 @@ This exists so each server can use its own custom salting formula.
 #Authentication
 Currently the project handles authentication in the following fashion:
 
-When a user registers or logs in, their apn token is added or updated in the database and they are returned a random token. Whenever the client makes a request to a page that requires authentication, they must pass the random token along with their apn. If the token and apn exist in the user table (and the token has not expired), that user info is bound to req.user and they are allowed to continue to the route action. Otherwise they recieve an error response.
+When a user registers or logs in, their client id is added or updated in the database and they are returned a random token. Whenever the client makes a request to a page that requires authentication, they must pass the random token along with their client id. If the token and client exist in the same row in user table (and the token has not expired), that user info is bound to req.user and they are allowed to continue to the route action. Otherwise they recieve an error response.
+
+The schema for pages requiring AUTHENTICATED role:
+```code
+var schema = {
+    type: 'object', properties : {
+		token : { required : true, type : 'string', length : 88},
+		client: { required : true, type : 'string', length: 64}
+    }
+};
+```
 
 #Routing
 All routing is in one place: defined in every controller and given a name. This is powerful because you can group your routes together by function or category (the controller itself), and see the functionality and routing all in the same place.
