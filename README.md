@@ -79,7 +79,7 @@ schema: loginSchema
 var loginSchema = registerSchema = { 
     type: 'object', properties: {
         email: { required: true, type: 'string', format: 'email' },
-	      password: { required: true, type: 'string' }
+	password: { required: true, type: 'string' }
     }
 };
 ```
