@@ -1,0 +1,24 @@
+{
+    "auth" : {
+	"token" : {
+	    "algorithm" : "SHA512",
+	    "salt" : "sjAJdk980.%$sE90",
+	    "lifespan" : { "days" : 14 }
+	} ,  
+
+	"password" : {
+	    "algorithm" : "SHA512",
+	    "salt" : "sk56sSIOU890%$#skf"
+	}
+    }
+    , "folders" : {
+	"controller":  "/app/controllers",
+	"app_module": "/app_modules",
+	"entity": "/app/entities"
+    }
+    , "firewall" : {
+	"whitelist" : [
+	    
+	]
+    }
+}

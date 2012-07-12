@@ -12,12 +12,10 @@ logger = require('tracer').colorConsole({
 
 app = module.exports = express.createServer();
 
-app.config = {};
-app.config.cwd = process.cwd();
-app.config.folders = require('./config/folders');
+app.config = require('./config/config');
 app.config.server = require('./config/server');
 app.config.mysql = require('./config/database');
-app.config.auth = require('./config/auth');
+app.config.cwd = process.cwd();
 
 app.settings.env = app.config.server.environment;
 
