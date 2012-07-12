@@ -4,6 +4,9 @@ Base Node APP for Lime Node Projects. This is a work in progress.
 This is used mainly for pure json based APIs. 
 Aka does not use body/query parser out of the box (does use json middleware), but since these are native connect middlewares it can be easy to add to the framework. Also, a lot of the customized middleware is designed with only json in mind. For instance, the router is currently not designed to generate urls with a query in them.
 
+#Config
+Config files are hardwired in to the config folder. They are loaded in the app.js before environments and bound to the app.
+
 #Routing
 All routing is in one place: defined in every controller and given a name. This is powerful because you can group your routes together by function or category (the controller itself), and see the functionality and routing all in the same place.
 
