@@ -13,6 +13,20 @@ This is not a node module / npm package at the moment. Simply clone the git repo
 git clone git://github.com/pixelshaded/MVC-Express.git
 ```
 
+Install dependencies.
+
+```code
+npm install
+```
+
+Then you need to copy the server.json.dist and database.json.dist from the config/dist folder to config folder and remove the dist extensions. Update the json for your server environment.
+
+Update your databse to current migration
+
+```code
+node migrate up
+```
+
 #Running
 ```code
 node server
