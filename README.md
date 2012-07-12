@@ -21,7 +21,7 @@ npm install
 
 Then you need to copy the server.json.dist and database.json.dist from the config/dist folder to config folder and remove the dist extensions. Update the json for your server environment.
 
-Update your databse to current migration
+Update your database to current migration
 
 ```code
 node migrate up
