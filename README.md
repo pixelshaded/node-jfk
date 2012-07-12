@@ -25,7 +25,13 @@ var routes = [
 exports.routes = routes;
 exports.prefix = "/auth";
 ```
-Two things are exported so the extended router can map out the routes: routes and prefix. Prefix is optional and its purpose is to prepend all your routes with a string.
+##Exports
+
+#routes
+The array containing all your route objects.
+
+#prefix - optional
+A string to be prepended to each uri.
 
 ##Route Object
 
