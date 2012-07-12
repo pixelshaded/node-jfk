@@ -171,7 +171,7 @@ Console commands are generated with https://github.com/visionmedia/commander.js/
 Migrations are tracked within migrations/config/migration-tracking.json. This file contains current version of your environment and an array of all the migrations files.
 
 ### Migration Files
-Migration files sit in the migrations folder. They are named by the datestamp when they were created. This means that should be in order by creation date.
+Migration files sit in the migrations folder. They are named by the datestamp when they were created. This means they should be in order by creation date.
 
 ### Migration Template
 If you want to create your own template for migrations, you can do so by creating one named migration-template in the migrations/config folder. The migration script will use this when it generates new migration files.
@@ -182,6 +182,11 @@ If you want to create your own template for migrations, you can do so by creatin
 node migrate status
 ```
 Gives you the current version of the environment, the latest migration version, and how many versions the environment is behind.
+
+```code
+node migrate list
+```
+Lists all migrations. The current environment version will be blue. This should give you a different context on which version your environment is in and how many migrations up or down you want to do.
 
 ```code
 node migrate resync
