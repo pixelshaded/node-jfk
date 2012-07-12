@@ -5,7 +5,15 @@ This is used mainly for pure json based APIs.
 Aka does not use body/query parser out of the box (does use json middleware), but since these are native connect middlewares it can be easy to add to the framework. Also, a lot of the customized middleware is designed with only json in mind. For instance, the router is currently not designed to generate urls with a query in them.
 
 #Config
-Config files are hardwired in to the config folder. They are loaded in the app.js before environments and bound to the app.
+Config files are hardwired to the config folder. They are loaded in the app.js before environments and bound to the app.
+
+##Folder Structure
+
+###Dist
+Dist contains server specific configurations (like database, domain name, etc). You simply need to copy to copy these to the config folder and remove the dist extension.
+
+###Environment
+This contains your express environment configuration, aka app.configure(). The global environment is loaded first, and then your specific environment is loaded afterwards. The environment is set inside the server.json file. Typically, I will bind all my global objects in the global environment, and leave any middleware to the actual environment files so I have full control on middleware flow. For instance, I would add node-mysql module to app.mysql in the global environment, but not say a session store for connect.
 
 #Routing
 All routing is in one place: defined in every controller and given a name. This is powerful because you can group your routes together by function or category (the controller itself), and see the functionality and routing all in the same place.
