@@ -62,7 +62,7 @@ action : login
 ```
 Arguments should be function(req, res, next) like any middleware. The related function for above example might
 look like
-``javascript
+```javascript
 function login(req, res, next){
 	res.json({'page' : 'login'}, 200);
 	next();
