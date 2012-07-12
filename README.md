@@ -74,4 +74,13 @@ Actions are the function definitions within the controller that the router will 
 ```javascript
 schema: loginSchema
 ```
+
+```javascript
+var loginSchema = registerSchema = { 
+    type: 'object', properties: {
+        email: { required: true, type: 'string', format: 'email' },
+	      password: { required: true, type: 'string' }
+    }
+};
+```
 This is a schema object. I use https://github.com/Baggz/Amanda for json validation. The should be defined above the route definitions so they are not undefined when the routes processes the controllers. The jsonValidator on the router is placed as a middleware after the json parser and uses the schema object to validate incoming json from the request body. This is powerful because your json api is almost self documenting. You can define your request API in a schema and it is automatically validated when a route a matched that contains it. A response is automatically generated on errors, before your routing functions are ever called. In otherwords, you can keep all validation out of your actions so they are cleaner.
