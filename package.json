@@ -1,5 +1,6 @@
 {
-    "name": "json-api-framework"
+    "name": "jfk"
+  , "description" : "A Node JSON Framework"
   , "author": "Alexander Fisher <mail@alexander-fisher.com>"
   , "main": "app"
   , "version": "0.0.1"
