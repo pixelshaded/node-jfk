@@ -14,8 +14,6 @@
     , "tracer": "0.5.1"
     , "mysql": "2.0.0-alpha3"
     , "connect": "2.3.6"
-    , "validator" : "0.4.9"
-    , "commander" : "1.0.0"
     , "keypress" : "0.0.2"
     , "format" : "0.1.4"
     , "amanda" : "0.4.2"
