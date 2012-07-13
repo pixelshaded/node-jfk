@@ -36,7 +36,7 @@ module.exports = function(approuter){
 	}
     }
 
-    app.util.foreachFileInTreeSync(app.config.cwd + app.config.folders.controller, processControllers);
+    app.util.foreachFileInTreeSync(app.config.root + app.config.folders.controller, processControllers);
     
     var debugString = 'Route Map\n\n';
     
