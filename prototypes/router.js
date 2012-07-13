@@ -5,7 +5,11 @@ var routes;
     
 function Router(_app){
 
-    this.prototype = _app.router; //we want to extend the normal router
+    Router.prototype = _app.router;
+    Router.prototype.findRouteByUri = findRouteByUri;
+    Router.prototype.findRouteName = findRouteName;
+   
+    //this = _app.router;
     app = _app;
     routes = {}; 
 
@@ -21,7 +25,7 @@ function Router(_app){
     app.logger.debug(debugString);
 }
 
-Router.prototype.generateURL = function(name, relative){
+function generateURL(name, relative){
     
     if (relative === undefined) relative = true;
     var route = findRouteByName(name);
@@ -34,7 +38,7 @@ Router.prototype.generateURL = function(name, relative){
     else return app.config.server[app.config.server.env].domain + route.uri;
 }
 
-Router.prototype.findRouteName = function(name){
+function findRouteName(name){
 
     for (var i in routes){
 
@@ -48,7 +52,8 @@ Router.prototype.findRouteName = function(name){
     return null;
 }
 
-Router.prototype.findRouteByUri = function(uri, method){
+//Router.prototype.findRouteByUri = function(uri, method){
+function findRouteByUri(uri, method) {
     
     for (var i in routes){
 	var route = routes[i];
@@ -112,7 +117,7 @@ function processControllers(folderPath, file){
 	    continue;
 	}	
 
-	var match = Router.prototype.findRouteByUri(route.uri, route.method);
+	var match = findRouteByUri(route.uri, route.method);
 
 	if (match){
 	    app.logger.warn('Route %s will overwrite route %s because they share the same uri: %s %s', route.name, match.name, route.method.toUpperCase(), route.uri);
