@@ -1,4 +1,4 @@
-*J*SON *F*ramewor*k*
+JSON F*ramewor*k
 Base Node Project for Lime Marketing. This is a work in progress.
 
 This is used mainly for pure json based API: in other words, no view/templating system. 
