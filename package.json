@@ -7,7 +7,7 @@
   , "private": true
   , "repository" : {
         "type" : "git",
-        "url" : "https://github.com/pixelshaded/MVC-Express"
+        "url" : "https://github.com/pixelshaded/node-jfk.git"
     } 
   , "dependencies": {
       "express": "2.5.11"
