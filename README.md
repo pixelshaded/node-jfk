@@ -215,7 +215,7 @@ Functions I found usefull that I use throughout my app.
 #Migrations
 The project supports database migrations. This does have some limitations. Since database structure queries cannot be handled in transactions, they need to be handled one at a time. In other words, there is no way to define many table alterations in one migration, and if one query fails, rollback. This means each migration can only have one query. Its a pain, but when needing to do alterations where keeping my data is not important, I simply roll back before the migration, update the query, and migration up to current version.
 
-Console commands are generated with https://github.com/visionmedia/commander.js/.
+Console commands are generated with [commander](https://github.com/visionmedia/commander.js/)
 
 ### Tracking File
 Migrations are tracked within migrations/config/migration-tracking.json. This file contains current version of your environment and an array of all the migrations files.
