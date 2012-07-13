@@ -1,7 +1,13 @@
 {
     "name": "json-api-framework"
+  , "author": "Alexander Fisher <mail@alexander-fisher.com>"
+  , "main": "app"
   , "version": "0.0.1"
   , "private": true
+  , "repository" : {
+        "type" : "git",
+        "url" : "https://github.com/pixelshaded/MVC-Express"
+    } 
   , "dependencies": {
       "express": "2.5.11"
     , "tracer": "0.5.1"

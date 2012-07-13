@@ -1,0 +1,26 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'nodejs', '/usr/bin/npm', 'link' ]
+2 info using npm@1.1.34
+3 info using node@v0.8.1
+4 verbose config file /home/pixelshaded/.npmrc
+5 verbose config file /usr/etc/npmrc
+6 verbose config file /usr/lib/nodejs/npm/npmrc
+7 verbose linkPkg /home/pixelshaded/Documents/Projects/MVC-Express
+8 verbose read json /home/pixelshaded/Documents/Projects/MVC-Express/package.json
+9 error Error: EACCES, symlink '/home/pixelshaded/Documents/Projects/MVC-Express'
+9 error  { [Error: EACCES, symlink '/home/pixelshaded/Documents/Projects/MVC-Express']
+9 error   errno: 3,
+9 error   code: 'EACCES',
+9 error   path: '/home/pixelshaded/Documents/Projects/MVC-Express' }
+10 error Please try running this command again as root/Administrator.
+11 error System Linux 3.2.0-26-generic
+12 error command "nodejs" "/usr/bin/npm" "link"
+13 error cwd /home/pixelshaded/Documents/Projects/MVC-Express
+14 error node -v v0.8.1
+15 error npm -v 1.1.34
+16 error path /home/pixelshaded/Documents/Projects/MVC-Express
+17 error code EACCES
+18 error message EACCES, symlink '/home/pixelshaded/Documents/Projects/MVC-Express'
+19 error errno 3
+20 error 3 errno
+21 verbose exit [ 3, true ]
