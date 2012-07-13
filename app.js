@@ -1,8 +1,12 @@
-module.exports = function(){
-    
-    express = require('express');
+module.exports = JFK;
 
-    var app = module.exports = express.createServer();
+var app;
+
+function JFK(config, server){
+    
+    var express = require('express');
+
+    app = express.createServer();
     
     app.connect = require('connect');
     app.fs = require('fs');
@@ -10,10 +14,9 @@ module.exports = function(){
 	format : "<{{title}}> {{file}}:{{line}} {{message}}"
     });
 
-    app.config = require('./config/app');
-    app.config.server = require('./config/server');
+    app.config = config;
+    app.config.server = server;
     app.config.root = __dirname;
-    app.responseAPI = require('./config/responseAPI').responseAPI;
 
     app.settings.env = app.config.server.env;
 
@@ -25,4 +28,6 @@ module.exports = function(){
     app.listen(app.config.server[app.config.server.env].port, app.config.server[app.config.server.env].domain, function(){
 	console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
     });
+    
+    JFK.prototype.app = app;
 }

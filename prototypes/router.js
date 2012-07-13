@@ -9,7 +9,7 @@ function Router(_app){
     app = _app;
     routes = {}; 
 
-    app.util.foreachFileInTreeSync(app.config.root + app.config.folders.controller, processControllers);
+    app.util.foreachFileInTreeSync(process.cwd() + app.config.folders.controller, processControllers);
     
     var debugString = 'Route Map\n\n';
     
@@ -79,8 +79,6 @@ function addSpaces(string, maxLength){
 }
 
 function processControllers(folderPath, file){
-    
-    app.logger.debug('Processing %s', file);
     
     var fullpath = folderPath + '/' + file;
     

@@ -1,10 +1,11 @@
 module.exports = function(app){
     
-    //objects
-    var Utilities = require(app.config.root + app.config.folders.prototype + '/Utilities');
-    var Router = require(app.config.root + app.config.folders.prototype + '/Router');
-    var Authentication = require(app.config.root + app.config.folders.prototype + '/Authentication');
-    var Middleware = require(app.config.root + app.config.folders.prototype + '/Middleware');
+    var prototypeFolder = app.config.root + '/prototypes/';
+    
+    var Utilities = require(prototypeFolder + 'Utilities');
+    var Router = require(prototypeFolder + 'Router');
+    var Authentication = require(prototypeFolder + 'Authentication');
+    var Middleware = require(prototypeFolder + 'Middleware');
     
     app.configure(function(){
 	
