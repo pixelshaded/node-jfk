@@ -4,7 +4,7 @@ Base Node Project for Lime Marketing. This is a work in progress.
 This is used mainly for pure json based API: in other words, no view/templating system. 
 It does not use body/query parser out of the box (does use json middleware), but since these are native connect middlewares it can be easy to add to the framework. Also, a lot of the customized middleware is designed with only json in mind. For instance, the router is currently not designed to generate urls with a query in them.
 
-This project also heavily relies on https://github.com/felixge/node-mysql. You can easily add your own ORM on top of it, but would need to change some middlewares if you didn't use mysql at all. I wanted the most flexibility and speed in terms of my mysql implementation, and most mysql ORMs are either missing too many features, too ineffecient (multiple queries for many to many relationships), or so outdated they dont work. I also wanted full control on my database schema, where a lot of ORMs are very limited on database data types.
+This project also heavily relies on [node-mysql](https://github.com/felixge/node-mysql). You can easily add your own ORM on top of it, but would need to change some middlewares if you didn't use mysql at all. I wanted the most flexibility and speed in terms of my mysql implementation, and most mysql ORMs are either missing too many features, too ineffecient (multiple queries for many to many relationships), or so outdated they dont work. I also wanted full control on my database schema, where a lot of ORMs are very limited on database data types.
 
 #Install
 This is not a node module / npm package at the moment. Simply clone the git repo and use it however you like.
@@ -69,7 +69,7 @@ The mysql database information for node-mysql.
 Contains settings for token generation and password hashing.
 
 ###auth.password.saltformat
-This string represents how the password will be salted. It uses https://github.com/baryon/node-tinytim to create a formatting template. The object that gets passed to tinytim has these properties:
+This string represents how the password will be salted. It uses [tinytim](https://github.com/baryon/node-tinytim) to create a formatting template. The object that gets passed to tinytim has these properties:
 * email
 * password
 * salt
@@ -181,7 +181,7 @@ var loginSchema =  registerSchema = {
     }
 };
 ```
-This is a schema object. I use https://github.com/Baggz/Amanda for json validation. These should be defined above the route definitions so they are not undefined when the router processes the controller. The jsonValidator on the router is placed as a middleware after the json parser and uses the schema object to validate incoming json from the request body. This is powerful because your json api is almost self documenting. You can define your request API in a schema and it is automatically validated when a route a matched that contains it. A response is automatically generated on errors, before your routing functions are ever called. In otherwords, you can keep all validation out of your actions so they are cleaner.
+This is a schema object. I use [Amanda](https://github.com/Baggz/Amanda) for json validation. These should be defined above the route definitions so they are not undefined when the router processes the controller. The jsonValidator on the router is placed as a middleware after the json parser and uses the schema object to validate incoming json from the request body. This is powerful because your json api is almost self documenting. You can define your request API in a schema and it is automatically validated when a route a matched that contains it. A response is automatically generated on errors, before your routing functions are ever called. In otherwords, you can keep all validation out of your actions so they are cleaner.
 
 #App Modules
 This folder contains all the services for your app. These are normally bound to app in the app.js or global environment.
