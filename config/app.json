@@ -1,7 +1,7 @@
 {
     "folders" : {
 	"controller":  "/app/controllers",
-	"app_module": "/app_modules"
+	"prototype": "/prototypes"
     }
     , "security" : [
 	{ "path" : "/auth/logout.*", "role" : "AUTHENTICATED"},

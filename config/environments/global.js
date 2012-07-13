@@ -1,18 +1,25 @@
-app.configure(function(){
-    console.log('Configuring global environment.');
+module.exports = function(app){
     
-    app.util = require(app.config.root + app.config.folders.app_module + '/utilities');
-    app.jsonValidator = require('amanda')('json');
+    //objects
+    var Utilities = require(app.config.root + app.config.folders.prototype + '/Utilities');
+    var Router = require(app.config.root + app.config.folders.prototype + '/Router');
+    var Authentication = require(app.config.root + app.config.folders.prototype + '/Authentication');
+    var Middleware = require(app.config.root + app.config.folders.prototype + '/Middleware');
     
-    app.Date = require('cromag'); 
-    
-    var db = app.config.server[app.config.server.env].database;
-
-    app.router = require(app.config.root + app.config.folders.app_module + '/router')(app.router);
-    app.middleware = require(app.config.root + app.config.folders.app_module + '/middleware');
-    app.mysql = require('mysql').createConnection(db);
-    app.check = require('validator').check;
-    app.sanitize = require('validator').sanitize;
-    app.auth = require(app.config.root + app.config.folders.app_module + '/authentication');
-    app.format = require('format').format;
-});
+    app.configure(function(){
+	
+	console.log('Configuring global environment.');
+	
+	app.util = new Utilities(app);
+	app.router = new Router(app);
+	app.middleware = new Middleware(app);
+	app.auth = new Authentication(app);
+	
+	app.jsonValidator = require('amanda')('json');
+	app.Date = require('cromag'); 
+	app.mysql = require('mysql').createConnection(app.config.server[app.config.server.env].database);
+	app.check = require('validator').check;
+	app.sanitize = require('validator').sanitize;
+	app.format = require('format').format;
+    });
+}

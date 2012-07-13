@@ -1,4 +1,12 @@
-exports.requestLogger = function(req, res, next){
+module.exports = Middleware;
+
+var app;
+
+function Middleware(_app){
+    app = _app;
+}
+
+Middleware.prototype.requestLogger = function(req, res, next){
     
     console.log('\033[90m' + 'REQUEST: ' + req.method
 	+ ' ' + req.originalUrl
@@ -7,7 +15,7 @@ exports.requestLogger = function(req, res, next){
     next();
 }
 
-exports.paramLogger = function(req, res, next){
+Middleware.prototype.paramLogger = function(req, res, next){
     
     if (req.method === 'GET' && JSON.stringify(req.query).length > 2) {
 	console.log('\033[90mGET QUERY: ' + JSON.stringify(req.query) + '\033[0m');
@@ -18,11 +26,11 @@ exports.paramLogger = function(req, res, next){
     next();
 }
 
-exports.handleUncaughtRoutes = function(req, res, next){
+Middleware.prototype.handleUncaughtRoutes = function(req, res, next){
     res.json({"errors" : "Uri '" + req.url + "' using method " + req.method + " is not supported."}, 404);
 }
 
-exports.logJsonResponse = function(req, res, next){
+Middleware.prototype.logJsonResponse = function(req, res, next){
         
     res.expressjson = res.json;
     res.json = function(){	
@@ -52,7 +60,7 @@ exports.logJsonResponse = function(req, res, next){
  * we will get an error from the json middleware. Lets catch it and send a
  * response.
  */
-exports.onJsonError = function(err, req, res, next){
+Middleware.prototype.onJsonError = function(err, req, res, next){
 	
     if (err){
 
@@ -74,7 +82,7 @@ exports.onJsonError = function(err, req, res, next){
     else next();
 }
 
-exports.firewall = function(req, res, next){
+Middleware.prototype.firewall = function(req, res, next){
     
     var paths = app.config.security;
     var role = '';
@@ -131,6 +139,27 @@ exports.firewall = function(req, res, next){
     }
     else {
 	logger.warning('Role %s is not supported by the firewall. Using ANONYMOUS.', role);
+	next();
+    }
+}
+
+Middleware.prototype.jsonValidator = function(req, res, next){
+	
+    var route = app.router.findRouteByUri(req.url, req.method.toLowerCase());
+
+    if (route && route.schema !== undefined){
+	this.app.jsonValidator.validate(req.body, route.schema, {singleError: false}, function(error){
+	    if (error){
+
+		res.json({"errors" : error.getMessages()}, 400);
+		return;
+	    }
+	    else {
+		next();
+	    }
+	});
+    }
+    else {
 	next();
     }
 }

@@ -1,14 +1,22 @@
-var hasher = require('jshashes');
+var Hasher = require('jshashes');
 var tim = require('tinytim').tim;
-var config = app.config.server.auth;
+var app, config;
 
-exports.hashpassword = function(email, password, cb){
+module.exports = Authentication;
+
+function Authentication(_app){
+    
+    app = _app;
+    config = app.config.server.auth;
+}
+
+Authentication.prototype.hashpassword = function(email, password, cb){
     var formatobj = {email : email, password : password, salt : config.password.salt};
-    var hash = new hasher[config.password.algorithm]().b64(tim(config.password.saltformat, formatobj));
+    var hash = new Hasher[config.password.algorithm]().b64(tim(config.password.saltformat, formatobj));
     cb(null, hash);
 }
 
-exports.validatePassword = function(email, password, reference, cb){
+Authentication.prototype.validatePassword = function(email, password, reference, cb){
     
     this.hashpassword(email, password, function(error, hash){
 	if (error){
@@ -26,9 +34,9 @@ exports.validatePassword = function(email, password, reference, cb){
     });
 }
 
-exports.generateToken = function(userID, apn, cb){
+Authentication.prototype.generateToken = function(userID, apn, cb){
     
-    var token = new hasher[config.token.algorithm]().b64(config.token.secret + app.Date.now().toString() + Math.floor((Math.random() * 1000)));
+    var token = new Hasher[config.token.algorithm]().b64(config.token.secret + app.Date.now().toString() + Math.floor((Math.random() * 1000)));
     var expires = new app.Date();
     expires.add(config.token.lifespan);
     var query = app.format('UPDATE users SET token = "%s", expires = "%s", apn = %s', token, expires.toDBString(), app.mysql.escape(apn));

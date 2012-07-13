@@ -1,4 +1,14 @@
-exports.getUndefined = function(objects, names){
+module.exports = Utilities;
+
+var app;
+
+function Utilities(_app){
+
+    app = _app;
+    
+}
+
+Utilities.prototype.getUndefined = function(objects, names){
     
     var defined = true;
     var logs = new Array();
@@ -20,15 +30,15 @@ exports.getUndefined = function(objects, names){
     else return logs;
 }
 
-exports.queryFailed = function(error, data, query, logNoResult){
+Utilities.prototype.queryFailed = function(error, data, query, logNoResult){
         
     //Sometimes we dont care if we have no results or affected rows.
     if (logNoResult === undefined) logNoResult = true;
 
     if (error){
-	logger.error('---------QUERY HAD AN ERROR---------');
-	logger.error(error);
-	logger.error(query);
+	app.logger.error('---------QUERY HAD AN ERROR---------');
+	app.logger.error(error);
+	app.logger.error(query);
 	return true;
     }
 
@@ -36,8 +46,8 @@ exports.queryFailed = function(error, data, query, logNoResult){
 
 	if (data.length === 0) {
 	    if (logNoResult) {
-		logger.error('---------QUERY DID NOT RETURN A RESULT---------');
-		logger.error(query);
+		app.logger.error('---------QUERY DID NOT RETURN A RESULT---------');
+		app.logger.error(query);
 	    }
 	    return true;
 	}
@@ -46,26 +56,26 @@ exports.queryFailed = function(error, data, query, logNoResult){
 
 	if (data.affectedRows === 0){
 	    if (logNoResult) {
-		logger.error('---------QUERY DID NOT AFFECT ANY ROWS---------');
-		logger.error(query);
+		app.logger.error('---------QUERY DID NOT AFFECT ANY ROWS---------');
+		app.logger.error(query);
 	    }
 	    return true;
 	}
     }
     else if (data.affectedRows === undefined && data.length === undefined) {
-	logger.error('---------INCORRECT DATA ARGUMENT---------');
-	logger.error('Data did not have a length or affected rows.');
-	logger.error('Query: %s', query);
-	logger.error('Data: %s', data);
+	app.logger.error('---------INCORRECT DATA ARGUMENT---------');
+	app.logger.error('Data did not have a length or affected rows.');
+	app.logger.error('Query: %s', query);
+	app.logger.error('Data: %s', data);
 	return true;
     }
 
     return false;
 }
 
-exports.foreachFileInTreeSync = function(folderPath, func){
+Utilities.prototype.foreachFileInTreeSync = function(folderPath, func){
 
-    fs.readdirSync(folderPath).forEach(function(file){
+    app.fs.readdirSync(folderPath).forEach(function(file){
 	if (file.lastIndexOf('.') === -1) {
 	    foreachFileInTreeSync(folderPath + '/' + file, func);
 	}
