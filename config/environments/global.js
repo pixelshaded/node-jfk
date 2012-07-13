@@ -1,6 +1,6 @@
 module.exports = function(app){
     
-    var prototypeFolder = app.config.root + '/prototypes/';
+    var prototypeFolder = app.config.root + '/lib/';
     
     var Utilities = require(prototypeFolder + 'Utilities');
     var Router = require(prototypeFolder + 'Router');
