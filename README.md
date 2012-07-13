@@ -1,4 +1,4 @@
-<h1>JSON Framework</h1>
+<h1>*J*SON *F*ramewor*k*</h1>
 Base Node Project for Lime Marketing. This is a work in progress.
 
 This is used mainly for pure json based API: in other words, no view/templating system. 
