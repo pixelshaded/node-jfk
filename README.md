@@ -10,7 +10,7 @@ This project also heavily relies on [node-mysql](https://github.com/felixge/node
 This is not a node module / npm package at the moment. Simply clone the git repo and use it however you like.
 
 ```code
-git clone git://github.com/pixelshaded/MVC-Express.git
+git clone git://github.com/pixelshaded/node-jfk.git
 ```
 
 Install dependencies.
