@@ -1,4 +1,4 @@
 node_modules
-config/database.json
 config/server.json
 migrations/config/migration-tracking.json
+/nbproject/private/
